@@ -7,14 +7,14 @@ Import::middlewares(files_name: ["auth.middleware.php"]);
 
 <head>
     <?php require Import::view_layout_path("head.php"); ?>
-    <title>Trang chủ</title>
+    <title>Tuyển sinh</title>
 </head>
 
 <body>
     <!-- header -->
     <?php require Import::view_layout_path("header/user-header.php") ?>
     <!-- main content -->
-    user id : <?php echo Session::get("user_id")?>
+    content
     <!-- footer -->
     <?php include Import::view_layout_path("footer/user-footer.php") ?>
 </body>

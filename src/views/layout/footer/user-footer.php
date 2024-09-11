@@ -1,4 +1,4 @@
-<div class="px-4 pt-16 mx-auto w-full md:px-24 lg:px-8 bg-[#bb2033] text-white text-base md:text-lg">
+<footer class="px-4 pt-16 mx-auto w-full md:px-24 lg:px-8 bg-[#bb2033] text-white text-base md:text-lg">
     <div class="grid gap-10 row-gap-6 mb-8 sm:grid-cols-2 lg:grid-cols-4 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl">
         <div class="sm:col-span-2">
             <a href="/" aria-label="Go home" title="Company" class="inline-flex items-center">
@@ -73,10 +73,10 @@
     </div>
     <div class="flex flex-col justify-center items-center pt-5 pb-10 border-t lg:flex-row">
         <p class=" ">
-            Bản quyền thuộc về Trường Đại học Công nghệ Thông tin
+            Bản quyền thuộc về TranNgocAnhDung
         </p>
     </div>
-</div>
+</footer>
 
 <div class="fixed bottom-8 right-5">
     <a href="#" class="bg-[#bb2033] p-2 md:p-4 rounded md:text-lg font-bold text-white">Top</a>

@@ -1,5 +1,13 @@
 <?php
 require($_SERVER['DOCUMENT_ROOT'] . "/src/utils/env.util.php");
+/**
+ * @param string $page_path
+ * @return bool
+ */
+function isActiveLink($page_path)
+{
+    return $_SERVER['REQUEST_URI'] == '/src/views/pages/' . $page_path;
+}
 class Import
 {
      /**
@@ -14,7 +22,7 @@ class Import
      * @param array $files_name
      * @return void
      */
-    public static function configs($files_name)
+    public static function configs($files_name): void
     {
         foreach ($files_name as $file_name) {
             require($_SERVER['DOCUMENT_ROOT'] . "/src/configs/" . $file_name);

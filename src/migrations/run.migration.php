@@ -18,7 +18,6 @@ try {
     }
     echo "Chạy file SQL thành công";
 } catch (PDOException $e) {
-    $pdo->rollBack();
     echo "Lỗi khi chạy file SQL: " . $e->getMessage();
 }
 $pdo = null;

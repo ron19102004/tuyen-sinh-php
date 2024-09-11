@@ -1,11 +1,12 @@
 <?php
+session_start();
 class Session{
     /**
      * @param string $key
      * @return mixed
      */
     public static function get($key){
-        return $_SESSION[$key]?? null;
+        return $_SESSION[$key] ?? false;
     }
     /**
      * @param string $key

@@ -16,7 +16,7 @@ interface Repository{
     public function findById($id);
     /**
      * @param Entity $entity
-     * @return bool
+     * @return bool|string
      */
     public function save($entity);
     /**
