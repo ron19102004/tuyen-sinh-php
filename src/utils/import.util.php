@@ -107,6 +107,15 @@ class Import
     {
         return $_SERVER['DOCUMENT_ROOT']. "/src/views/layout/" . $file_name;
     }
+     /**
+     * Path lấy từ root folder
+     * @param string $file_name
+     * @return string
+     */
+    public static function view_assets_path($file_name)
+    {
+        return $_SERVER['DOCUMENT_ROOT']. "/src/views/assets/" . $file_name;
+    }
     /**
      * @param string $file_name
      * @return string

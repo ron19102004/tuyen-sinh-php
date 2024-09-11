@@ -64,7 +64,7 @@
             </li>
             <?php
             if (!AuthMiddleware::isAuth()) {
-                echo '<li class="">';
+                echo '<li class="inactive-link">';
                 echo '   <a href="' . Import::view_page_path("auth/login.php") . '">đăng nhập</a>';
                 echo '</li>';
             } else {
@@ -91,7 +91,7 @@
             </li>
             <?php
             if (!AuthMiddleware::isAuth()) {
-                echo '<li class="">';
+                echo '<li class="inactive-link">';
                 echo '   <a href="' . Import::view_page_path("auth/login.php") . '">đăng nhập</a>';
                 echo '</li>';
             } else {
@@ -104,7 +104,7 @@
     </nav>
 </header>
 <!-- header fixed  -->
-<header class="hidden fixed w-full top-0" id="header-fixed">
+<header class="hidden fixed w-full top-0 z-30" id="header-fixed">
     <nav class="bg-[#fed014] flex min-w-screen mx-auto">
         <a href="/" class="flex items-center w-full">
             <img src="<?php echo Env::get("system")["logo"]; ?>" alt="banner" class="h-10 md:h-16 w-fit object-cover">
@@ -122,7 +122,7 @@
             </li>
             <?php
             if (!AuthMiddleware::isAuth()) {
-                echo '<li class="">';
+                echo '<li class="inactive-link">';
                 echo '   <a href="' . Import::view_page_path("auth/login.php") . '">đăng nhập</a>';
                 echo '</li>';
             } else {

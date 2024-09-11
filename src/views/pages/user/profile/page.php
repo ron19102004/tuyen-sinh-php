@@ -67,6 +67,7 @@ AuthMiddleware::isAuthenticated(function () {});
                         </dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2" id="role">
                             Unknown
+
                         </dd>
                     </div>
                 </dl>
@@ -87,14 +88,27 @@ AuthMiddleware::isAuthenticated(function () {});
             },
             success: (res) => {
                 console.log(res);
-                
-                const data = JSON.parse(res);                
-                if(data.status){
+
+                const data = JSON.parse(res);
+                if (data.status) {
                     $("#fullName").text(data.data.fullName);
                     $("#username").text(data.data.username);
                     $("#email").text(data.data.email);
                     $("#phone").text(data.data.phone);
-                    $("#role").text(data.data.role);
+                    $("#role").html(`
+                    <a class="hover:text-blue-600" href="<?php
+                                switch (Session::get("user_role")) {
+                                    case UserRole::Admin->name: {
+                                            echo Import::view_page_path("admin/dashboard/page.php");
+                                            break;
+                                        }
+                                    default: {
+                                            echo "#";
+                                        }
+                                }
+                                ?>">
+                        ${data.data.role}       
+                    </a>`);
                 }
             }
         })

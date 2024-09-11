@@ -77,10 +77,6 @@
         </p>
     </div>
 </footer>
-
-<div class="fixed bottom-8 right-5">
-    <a href="#" class="bg-[#bb2033] p-2 md:p-4 rounded md:text-lg font-bold text-white">Top</a>
-</div>
 <script>
     AOS.init({
         duration: 1200,
