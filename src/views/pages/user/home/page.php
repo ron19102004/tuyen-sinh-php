@@ -14,10 +14,63 @@ Import::middlewares(files_name: ["auth.middleware.php"]);
     <!-- header -->
     <?php require Import::view_layout_path("header/user-header.php") ?>
     <!-- main content -->
+
+
+    <section id="default-carousel" class="relative w-full px-4 md:px-20 pt-4 md:pt-5 md:pb-12" data-carousel="slide">
+        <!-- Carousel wrapper -->
+        <div class="relative h-56 overflow-hidden rounded-lg md:h-[28rem]">
+            <!-- Item 1 -->
+            <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                <img src="<?php echo Import::view_assets_path("anh-truong-slide-5.png");?>" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 object-cover h-full" alt="">
+            </div>
+            <!-- Item 2 -->
+            <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                <img src="<?php echo Import::view_assets_path("anh-truong-slide-4.jpg");?>" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 object-cover h-full" alt="">
+            </div>
+            <!-- Item 3 -->
+            <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                <img src="<?php echo Import::view_assets_path("anh-truong-slide-3.png");?>" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 object-cover h-full" alt="">
+            </div>
+            <!-- Item 4 -->
+            <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                <img src="<?php echo Import::view_assets_path("anh-truong-slide-2.jpg");?>" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 object-cover h-full" alt="">
+            </div>
+            <!-- Item 5 -->
+            <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                <img src="<?php echo Import::view_assets_path("anh-truong-slide-1.jpg");?>" class="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 object-cover h-full" alt="">
+            </div>
+        </div>
+        <!-- Slider indicators -->
+        <div class="absolute z-30 flex -translate-x-1/2 bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
+            <button type="button" class="w-3 h-3 rounded-full" aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
+            <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 2" data-carousel-slide-to="1"></button>
+            <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 3" data-carousel-slide-to="2"></button>
+            <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 4" data-carousel-slide-to="3"></button>
+            <button type="button" class="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 5" data-carousel-slide-to="4"></button>
+        </div>
+        <!-- Slider controls -->
+        <button type="button" class="absolute top-0 start-1 md:start-10 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
+            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4" />
+                </svg>
+                <span class="sr-only">Previous</span>
+            </span>
+        </button>
+        <button type="button" class="absolute top-0 end-1 md:end-10 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
+            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                <svg class="w-4 h-4 text-white dark:text-gray-800 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4" />
+                </svg>
+                <span class="sr-only">Next</span>
+            </span>
+        </button>
+    </section>
+
     <section class="text-gray-700 body-font md:px-10">
         <div class="container mx-auto flex px-5 py-16 md:flex-row flex-col items-center">
             <div data-aos="fade-right" class="lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
-                <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">Khát vọng vươn tới 
+                <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">Khát vọng vươn tới
                     <br class="hidden lg:inline-block">đỉnh cao tri thức
                 </h1>
                 <p class="mb-8 leading-relaxed">Trường THPT Chuyên Lê Hồng Phong, TP.HCM, là một trong những ngôi trường danh tiếng nhất Việt Nam, được thành lập từ năm 1927. Trường nổi bật với chương trình đào tạo chuyên sâu, đội ngũ giáo viên xuất sắc, và nhiều học sinh đạt thành tích cao trong các kỳ thi quốc gia và quốc tế. Đây là môi trường lý tưởng để học sinh phát triển toàn diện, từ học tập đến các hoạt động ngoại khóa, hướng tới thành công trong tương lai.</p>
@@ -33,10 +86,10 @@ Import::middlewares(files_name: ["auth.middleware.php"]);
     <section class="text-gray-700 body-font border-t border-gray-200 md:px-10">
         <div class="container px-5 py-16 mx-auto flex flex-wrap">
             <div data-aos="fade-right" class="lg:w-1/2 w-full mb-10 lg:mb-0 rounded-lg overflow-hidden">
-                <img alt="feature" class="object-cover object-center h-full w-full" src="http://www.thpt-lehongphong-tphcm.edu.vn/sites/default/files/202011061288/anh.jpg">
+                <img alt="feature" class="object-cover object-center h-full w-full" src="<?php echo Import::view_assets_path("lehongphong.jpg"); ?>">
             </div>
             <div class="flex flex-col flex-wrap lg:py-6 -mb-10 lg:w-1/2 lg:pl-12 lg:text-left text-center">
-                <div data-aos="fade-up-left" class="flex flex-col mb-10 lg:items-start items-center">
+                <div data-aos="fade-up" class="flex flex-col mb-10 lg:items-start items-center">
                     <div class="w-12 h-12 inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-500 mb-5">
                         <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6" viewBox="0 0 24 24">
                             <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
@@ -47,7 +100,7 @@ Import::middlewares(files_name: ["auth.middleware.php"]);
                         <p class="leading-relaxed text-base">Trường THPT Chuyên Lê Hồng Phong, với hơn 90 năm phát triển, là một trong những ngôi trường có truyền thống học thuật hàng đầu tại Việt Nam.</p>
                     </div>
                 </div>
-                <div data-aos="fade-up-left" class="flex flex-col mb-10 lg:items-start items-center">
+                <div data-aos="fade-up" class="flex flex-col mb-10 lg:items-start items-center">
                     <div class="w-12 h-12 inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-500 mb-5">
                         <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6" viewBox="0 0 24 24">
                             <circle cx="6" cy="6" r="3"></circle>
@@ -60,7 +113,7 @@ Import::middlewares(files_name: ["auth.middleware.php"]);
                         <p class="leading-relaxed text-base"> Trường cung cấp chương trình học chuyên biệt cho học sinh giỏi, với các lớp chuyên về Toán, Lý, Hóa, Sinh, Văn, Anh, và nhiều môn khác, giúp học sinh phát triển tư duy và kiến thức chuyên sâu.</p>
                     </div>
                 </div>
-                <div data-aos="fade-up-left" class="flex flex-col mb-10 lg:items-start items-center">
+                <div data-aos="fade-up" class="flex flex-col mb-10 lg:items-start items-center">
                     <div class="w-12 h-12 inline-flex items-center justify-center rounded-full bg-indigo-100 text-indigo-500 mb-5">
                         <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-6 h-6" viewBox="0 0 24 24">
                             <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>

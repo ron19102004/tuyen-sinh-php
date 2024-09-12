@@ -2,20 +2,16 @@
     <div class="grid gap-10 row-gap-6 mb-8 sm:grid-cols-2 lg:grid-cols-4 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl">
         <div class="sm:col-span-2">
             <a href="/" aria-label="Go home" title="Company" class="inline-flex items-center">
-                <svg class="w-8 text-deep-purple-accent-400" viewBox="0 0 24 24" stroke-linejoin="round" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" stroke="currentColor" fill="none">
-                    <rect x="3" y="1" width="7" height="12"></rect>
-                    <rect x="3" y="17" width="7" height="6"></rect>
-                    <rect x="14" y="1" width="7" height="6"></rect>
-                    <rect x="14" y="11" width="7" height="12"></rect>
-                </svg>
-                <span class="ml-2  font-bold tracking-wide  uppercase"></span>
+                <img src="<?php echo Env::get("system")["logo"]; ?>" alt="banner" class="h-10 md:h-16 w-fit object-cover">
+                <span class="ml-2  font-bold tracking-wide  ">
+                    <span>Trường THPT Chuyên </span>
+                    <br />
+                    <span class="font-semibold"><?php echo Env::get("system")["name"]; ?></span>
+                </span>
             </a>
             <div class="mt-6 lg:max-w-sm">
                 <p class=" ">
-                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.
-                </p>
-                <p class="mt-4  ">
-                    Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+                    "Non sông Việt Nam có trở nên tươi đẹp hay không, dân tộc Việt Nam có bước tới đài vinh quang sánh vai với các cường quốc năm châu được hay không, chính là nhờ một phần lớn ở công học tập của các em." - Chủ tịch Hồ Chí Minh
                 </p>
             </div>
         </div>
@@ -67,7 +63,8 @@
                 </a>
             </div>
             <p class="mt-4  ">
-                Bacon ipsum dolor amet short ribs pig sausage prosciutto chicken spare ribs salami.
+               <p>Mở cửa: 07:00 AM - 05:00 PM</p>
+               <p>Hoạt động: Thứ 2 - thứ 7 </p>
             </p>
         </div>
     </div>

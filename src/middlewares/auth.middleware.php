@@ -1,5 +1,9 @@
 <?php
 Import::utils(["session.util.php"]);
+function isActiveLink($page_path)
+{
+    return $_SERVER['REQUEST_URI'] == '/src/views/pages/' . $page_path;
+}
 class AuthMiddleware
 {
   /**
@@ -23,31 +27,33 @@ class AuthMiddleware
   /**
    * 
    * @param array<string> $role
-   * @param callable $callback
+   * @param callable $success
+   * @param callable $error
    * @return void
    */
-  public static function hasRoles($roles, $callback)
+  public static function hasRoles($roles, $success, $error)
   {
     if (Session::get("is_authenticated") == false) {
-      header("Location: /src/views/pages/auth/login.php");
+      $error("Yêu cầu đăng nhập");
       return;
     }
     if (in_array(Session::get("user_role"), $roles) == false) {
-      header("Location: /src/views/pages/user/home/page.php");
+      $error("Không có quyền truy cập!");
       return;
     }
-    $callback();
+    $success();
   }
   /**
-   * @param callable $callback
+   * @param callable $success
+   * @param callable $error
    * @return void
    */
-  public static function isAuthenticated($callback)
+  public static function isAuthenticated($success, $error)
   {
     if (Session::get("is_authenticated") == false) {
-      header("Location: /src/views/pages/auth/login.php");
+      $error();
       return;
     }
-    $callback();
+    $success();
   }
 }

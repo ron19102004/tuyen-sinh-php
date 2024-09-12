@@ -4,10 +4,6 @@ require($_SERVER['DOCUMENT_ROOT'] . "/src/utils/env.util.php");
  * @param string $page_path
  * @return bool
  */
-function isActiveLink($page_path)
-{
-    return $_SERVER['REQUEST_URI'] == '/src/views/pages/' . $page_path;
-}
 class Import
 {
      /**
@@ -114,7 +110,7 @@ class Import
      */
     public static function view_assets_path($file_name)
     {
-        return $_SERVER['DOCUMENT_ROOT']. "/src/views/assets/" . $file_name;
+        return "/src/views/assets/" . $file_name;
     }
     /**
      * @param string $file_name

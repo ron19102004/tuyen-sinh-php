@@ -1,8 +1,8 @@
 <?php
 //Import đã có env
 require($_SERVER['DOCUMENT_ROOT'] . "/src/utils/import.util.php");
-Import::utils(["route.util.php"]);
-//auth middleware có đã có session util
+Import::utils(["route.util.php", "response.util.php"]);
+//auth middleware  đã có session util
 Import::middlewares(["auth.middleware.php"]);
 Import::interfaces(["repository.interface.php"]);
 Import::entities(["user.entity.php"]);
@@ -43,7 +43,11 @@ class AuthRoute extends Route
                         echo $this->authController
                             ->me()
                             ->toJson();
+                    }, function () {
+                        $res = new Response(false, null, "Yêu cầu đăng nhập");
+                        echo $res->toJson();
                     });
+                    break;
                 }
         }
     }

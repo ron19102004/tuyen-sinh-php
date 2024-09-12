@@ -1,7 +1,9 @@
 <?php require $_SERVER['DOCUMENT_ROOT'] . "/src/utils/import.util.php";
 Import::middlewares(files_name: ["auth.middleware.php"]);
 Import::entities(files_name: ["user.entity.php"]);
-AuthMiddleware::isAuthenticated(function () {});
+AuthMiddleware::isAuthenticated(function () {}, function(){
+    header("Location: /src/views/pages/auth/login.php");
+});
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +18,6 @@ AuthMiddleware::isAuthenticated(function () {});
     <!-- header -->
     <?php require Import::view_layout_path("header/user-header.php") ?>
     <!-- main content -->
-    <input type="text" hidden id="url" value="<?php echo Import::route_path("auth.route.php"); ?>">
     <div class="md:p-5">
         <div class="bg-white max-w-2xl mx-auto shadow-lg overflow-hidden sm:rounded-lg">
             <div class="px-4 py-5 sm:px-6">
@@ -61,9 +62,9 @@ AuthMiddleware::isAuthenticated(function () {});
                             Unknown
                         </dd>
                     </div>
-                    <div class="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+                    <div class="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
                         <dt class="text-sm font-medium text-gray-500">
-                            Vai trò
+                            Vai trò <span class="italic">(Nhấn vào nếu bạn có vai trò trong hệ thống)</span>
                         </dt>
                         <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2" id="role">
                             Unknown
@@ -79,7 +80,7 @@ AuthMiddleware::isAuthenticated(function () {});
 </body>
 <script>
     $(() => {
-        const url = $("#url").val();
+        const url = "<?php echo Import::route_path("auth.route.php"); ?>";
         $.ajax({
             url: url,
             method: "POST",

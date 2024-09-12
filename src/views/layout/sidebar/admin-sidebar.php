@@ -7,9 +7,13 @@
         </div>
     </div>
     <nav class="mt-10">
-        <a class="flex items-center px-6 py-4 mt-4 text-gray-100 bg-opacity-25  <?php echo isActiveLink("admin/dashboard/page.php") ? "bg-gray-700 " : "hover:bg-gray-700 "; ?>" href="#">
+        <a class="flex items-center px-6 py-4 mt-4 text-gray-100 bg-opacity-25  <?php echo isActiveLink("admin/dashboard/page.php") ? "bg-gray-700 " : "hover:bg-gray-700 "; ?>" href="<?php echo Import::view_page_path("admin/dashboard/page.php"); ?>">
             <i class="fa-solid fa-house"></i>
             <span class="mx-3">Dashboard</span>
+        </a>
+        <a class="flex items-center px-6 py-4 mt-4 text-gray-100 bg-opacity-25  <?php echo isActiveLink("admin/account/page.php") ? "bg-gray-700 " : "hover:bg-gray-700 "; ?>" href="<?php echo Import::view_page_path("admin/account/page.php"); ?>">
+            <i class="fa-solid fa-user"></i>
+            <span class="mx-3">Tài khoản</span>
         </a>
         <button id="logout-btn" class="flex items-center px-6 py-4 mt-4 text-gray-100 bg-opacity-25  hover:bg-gray-700 w-full" href="#">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>

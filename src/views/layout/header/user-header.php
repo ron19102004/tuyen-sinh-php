@@ -63,11 +63,7 @@
                 <a href="<?php echo Import::view_page_path("user/admissions/page.php"); ?>">tuyển sinh</a>
             </li>
             <?php
-            if (!AuthMiddleware::isAuth()) {
-                echo '<li class="inactive-link">';
-                echo '   <a href="' . Import::view_page_path("auth/login.php") . '">đăng nhập</a>';
-                echo '</li>';
-            } else {
+            AuthMiddleware::isAuthenticated(function () {
                 //account
                 echo '<li class="' . (isActiveLink("user/profile/page.php") ? "active-link" : "inactive-link") . '">';
                 echo '   <a href="' . Import::view_page_path("user/profile/page.php") . '">tài khoản</a>';
@@ -76,13 +72,17 @@
                 echo '<li class="inactive-link">';
                 echo '<button class="uppercase" id="logout-btn">đăng xuất</button>';
                 echo '</li>';
-            }
+            }, function () {
+                echo '<li class="inactive-link">';
+                echo '   <a href="' . Import::view_page_path("auth/login.php") . '">đăng nhập</a>';
+                echo '</li>';
+            });
             ?>
         </ul>
     </nav>
     <!-- nav mobile  -->
     <nav class="bg-[#fed014] hidden" id="nav-mobile">
-        <ul class="uppercase container mx-auto p-2 space-y-2 font-semibold text-gray-700">
+        <ul class="uppercase container mx-auto p-4 space-y-2 font-semibold text-gray-700">
             <li class="<?php echo isActiveLink("user/home/page.php") ? "text-white" : ""; ?>">
                 <a href="<?php echo Import::view_page_path("user/home/page.php"); ?>">trang chủ</a>
             </li>
@@ -90,22 +90,27 @@
                 <a href="<?php echo Import::view_page_path("user/admissions/page.php"); ?>">tuyển sinh</a>
             </li>
             <?php
-            if (!AuthMiddleware::isAuth()) {
+            AuthMiddleware::isAuthenticated(function () {
+                //account
+                echo '<li class="' . (isActiveLink("user/profile/page.php") ? "active-link" : "inactive-link") . '">';
+                echo '   <a href="' . Import::view_page_path("user/profile/page.php") . '">tài khoản</a>';
+                echo '</li>';
+                //logout
+                echo '<li class="inactive-link">';
+                echo '<button class="uppercase" id="logout-btn">đăng xuất</button>';
+                echo '</li>';
+            }, function () {
                 echo '<li class="inactive-link">';
                 echo '   <a href="' . Import::view_page_path("auth/login.php") . '">đăng nhập</a>';
                 echo '</li>';
-            } else {
-                echo '<li class="' . (isActiveLink("user/profile/page.php") ? "text-white" : "") . '">';
-                echo '   <a href="' . Import::view_page_path("user/profile/page.php") . '">tài khoản</a>';
-                echo '</li>';
-            }
+            });
             ?>
         </ul>
     </nav>
 </header>
 <!-- header fixed  -->
-<header class="hidden fixed w-full top-0 z-30" id="header-fixed">
-    <nav class="bg-[#fed014] flex min-w-screen mx-auto">
+<header class="hidden fixed w-full top-0 z-40" id="header-fixed">
+    <nav class="bg-[#fed014] px-52 py-1 flex min-w-screen mx-auto">
         <a href="/" class="flex items-center w-full">
             <img src="<?php echo Env::get("system")["logo"]; ?>" alt="banner" class="h-10 md:h-16 w-fit object-cover">
             <h1 class="flex flex-col text-gray-800">
@@ -121,15 +126,20 @@
                 <a href="<?php echo Import::view_page_path("user/admissions/page.php"); ?>">tuyển sinh</a>
             </li>
             <?php
-            if (!AuthMiddleware::isAuth()) {
-                echo '<li class="inactive-link">';
-                echo '   <a href="' . Import::view_page_path("auth/login.php") . '">đăng nhập</a>';
-                echo '</li>';
-            } else {
+            AuthMiddleware::isAuthenticated(function () {
+                //account
                 echo '<li class="' . (isActiveLink("user/profile/page.php") ? "active-link" : "inactive-link") . '">';
                 echo '   <a href="' . Import::view_page_path("user/profile/page.php") . '">tài khoản</a>';
                 echo '</li>';
-            }
+                //logout
+                echo '<li class="inactive-link">';
+                echo '<button class="uppercase" id="logout-btn">đăng xuất</button>';
+                echo '</li>';
+            }, function () {
+                echo '<li class="inactive-link">';
+                echo '   <a href="' . Import::view_page_path("auth/login.php") . '">đăng nhập</a>';
+                echo '</li>';
+            });
             ?>
         </ul>
     </nav>
