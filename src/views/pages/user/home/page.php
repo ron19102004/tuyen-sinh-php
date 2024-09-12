@@ -75,7 +75,7 @@ Import::middlewares(files_name: ["auth.middleware.php"]);
                 </h1>
                 <p class="mb-8 leading-relaxed">Trường THPT Chuyên Lê Hồng Phong, TP.HCM, là một trong những ngôi trường danh tiếng nhất Việt Nam, được thành lập từ năm 1927. Trường nổi bật với chương trình đào tạo chuyên sâu, đội ngũ giáo viên xuất sắc, và nhiều học sinh đạt thành tích cao trong các kỳ thi quốc gia và quốc tế. Đây là môi trường lý tưởng để học sinh phát triển toàn diện, từ học tập đến các hoạt động ngoại khóa, hướng tới thành công trong tương lai.</p>
                 <div class="flex justify-center">
-                    <button class="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Lập hồ sơ thi tuyển</button>
+                    <a href="<?php echo Import::view_page_path("user/admissions/registration-form.php");?>" class="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">Lập hồ sơ thi tuyển</a>
                 </div>
             </div>
             <div class="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
