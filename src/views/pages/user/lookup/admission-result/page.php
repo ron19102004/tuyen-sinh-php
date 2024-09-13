@@ -13,7 +13,7 @@ Import::middlewares(files_name: ["auth.middleware.php"]);
     <!-- header -->
     <?php require Import::view_layout_path("header/user-header.php") ?>
     <!-- main  -->
-    <div class="bg-blue-600 shadow-lg py-5">
+    <div class="bg-blue-800 shadow-lg py-5">
         <div class="container mx-auto px-4">
             <h1 class="text-white text-3xl font-bold text-center">Tra cứu hồ sơ xét tuyển</h1>
         </div>

@@ -1,6 +1,7 @@
 <?php require $_SERVER['DOCUMENT_ROOT'] . "/src/utils/import.util.php";
+Import::entities(["user.entity.php"]);
 Import::middlewares(files_name: ["auth.middleware.php"]);
-AuthMiddleware::isAuthenticated(function () {}, function () {
+AuthMiddleware::hasRoles([UserRole::User->name], function () {}, function () {
     header("Location: /src/views/pages/auth/login.php");
 })
 ?>
@@ -30,7 +31,7 @@ AuthMiddleware::isAuthenticated(function () {}, function () {
 
                 <!-- Giới tính -->
                 <div class="mb-6">
-                    <label class="block text-gray-700 font-bold mb-2">Ngoại ngữ thi</label>
+                    <label class="block text-gray-700 font-bold mb-2">Giới tính</label>
                     <div class="flex space-x-4">
                         <label class="flex items-center cursor-pointer p-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition">
                             <input type="radio" id="male" name="gender" value="male" class="form-radio h-5 w-5 text-blue-500 focus:ring-blue-300" required>
@@ -215,19 +216,12 @@ AuthMiddleware::isAuthenticated(function () {}, function () {
                                     <input type="number" name="foreign_lang_avg" step="0.1" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition duration-150 ease-in-out" required>
                                 </td>
                             </tr>
-                            <tr class="font-semibold bg-gray-100">
-                                <td class="border px-4 py-2">Trung Bình Cả 3 Môn</td>
-                                <td class="border px-4 py-2">
-                                    <input type="number" name="avg_all_subjects" step="0.1" class="w-full p-2 border border-gray-300 rounded-lg bg-gray-200 cursor-not-allowed" readonly>
-                                </td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
 
                 <!-- Nút gửi và in -->
-                <div class="flex justify-between mt-6">
-                    <button type="button" onclick="printForm()" class="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-800">In Đơn</button>
+                <div class="flex justify-end mt-6">
                     <button id="btn-submit" class="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-800">Gửi Đơn</button>
                 </div>
             </form>
@@ -238,27 +232,26 @@ AuthMiddleware::isAuthenticated(function () {}, function () {
     $(() => {
         $("#btn-submit").click((e) => {
             e.preventDefault();
-            // Lấy giá trị từ các trường
-            const fullname = $('#fullname').val().trim();
+            const fullname = $('#fullname').val();
             const gender = $('input[name="gender"]:checked').val();
             const day = $('#day').val();
             const month = $('#month').val();
             const year = $('#year').val();
-            const ethnicity = $('#ethnicity').val().trim();
-            const houseNumber = $('#house_number').val().trim();
-            const street = $('#street').val().trim();
-            const ward = $('#ward').val().trim();
-            const city = $('#city').val().trim();
-            const province = $('#province').val().trim();
-            const phone1 = $('#phone1').val().trim();
-            const phone2 = $('#phone2').val().trim();
-            const schoolName = $('#school_name').val().trim();
-            const thcsCity = $('#thcs_city').val().trim();
-            const thcsProvince = $('#thcs_province').val().trim();
-            const examNumber = $('#exam_number').val().trim();
-            const examSubject = $('#exam_subject').val().trim();
-            const firstChoice = $('#first_choice').val().trim();
-            const secondChoice = $('#second_choice').val().trim();
+            const ethnicity = $('#ethnicity').val();
+            const houseNumber = $('#house_number').val();
+            const street = $('#street').val();
+            const ward = $('#ward').val();
+            const city = $('#city').val();
+            const province = $('#province').val();
+            const phone1 = $('#phone1').val();
+            const phone2 = $('#phone2').val();
+            const schoolName = $('#school_name').val();
+            const thcsCity = $('#thcs_city').val();
+            const thcsProvince = $('#thcs_province').val();
+            const examNumber = $('#exam_number').val();
+            const examSubject = $('#exam_subject').val();
+            const firstChoice = $('#first_choice').val();
+            const secondChoice = $('#second_choice').val();
             const language = $('input[name="language"]:checked').val();
             const specialSubjectAvg = $('#special_subject_avg').val();
             const overallAvg = $('#overall_avg').val();
@@ -266,78 +259,99 @@ AuthMiddleware::isAuthenticated(function () {}, function () {
             const literatureAvg = $('input[name="literature_avg"]').val();
             const foreignLangAvg = $('input[name="foreign_lang_avg"]').val();
 
-            // Hàm kiểm tra tính hợp lệ của các trường
-            function validateField(value, message) {
-                if (value === '' || value == null) {
-                    alert(message);
-                    return false;
-                }
-                return true;
-            }
+            // Lấy giá trị từ bảng hạnh kiểm và học lực
+            const conduct6 = $('input[name="conduct_6"]').val();
+            const academic6 = $('input[name="academic_6"]').val();
+            const conduct7 = $('input[name="conduct_7"]').val();
+            const academic7 = $('input[name="academic_7"]').val();
+            const conduct8 = $('input[name="conduct_8"]').val();
+            const academic8 = $('input[name="academic_8"]').val();
+            const conduct9_1 = $('input[name="conduct_9_1"]').val();
+            const academic9_1 = $('input[name="academic_9_1"]').val();
 
-            // Hàm kiểm tra tính hợp lệ của ngày tháng năm
-            function isValidDate(day, month, year) {
-                const date = new Date(year, month - 1, day); // Tháng trong JS bắt đầu từ 0
-                const currentYear = new Date().getFullYear();
-
-                // Kiểm tra ngày tháng năm hợp lệ và năm sinh không quá hiện tại
-                return date && date.getDate() === parseInt(day) &&
-                    (date.getMonth() + 1) === parseInt(month) &&
-                    date.getFullYear() === parseInt(year) &&
-                    year <= currentYear;
-            }
-
-            // Hàm kiểm tra số điện thoại hợp lệ (10 số và chỉ chứa số)
-            function isValidPhoneNumber(phone) {
-                const phoneRegex = /^(0|\+84)(3|5|7|8|9)[0-9]{8}$/;
-                return phoneRegex.test(phone);
-            }
-
-            // Validate từng trường
-            if (!validateField(fullname, 'Vui lòng nhập họ và tên') ||
-                !validateField(gender, 'Vui lòng chọn giới tính') ||
-                !validateField(day, 'Vui lòng nhập ngày sinh') ||
-                !validateField(month, 'Vui lòng nhập tháng sinh') ||
-                !validateField(year, 'Vui lòng nhập năm sinh') ||
-                !validateField(ethnicity, 'Vui lòng nhập dân tộc') ||
-                !validateField(houseNumber, 'Vui lòng nhập số nhà') ||
-                !validateField(street, 'Vui lòng nhập tên phố') ||
-                !validateField(ward, 'Vui lòng nhập phường') ||
-                !validateField(city, 'Vui lòng nhập thành phố') ||
-                !validateField(province, 'Vui lòng nhập tỉnh') ||
-                !validateField(phone1, 'Vui lòng nhập số điện thoại 1') ||
-                !validateField(phone2, 'Vui lòng nhập số điện thoại 2') ||
-                !validateField(schoolName, 'Vui lòng nhập tên trường THCS lớp 9 đã học') ||
-                !validateField(thcsCity, 'Vui lòng nhập thành phố của trường THCS') ||
-                !validateField(thcsProvince, 'Vui lòng nhập tỉnh của trường THCS') ||
-                !validateField(examNumber, 'Vui lòng nhập số báo danh xét tốt nghiệp THCS') ||
-                !validateField(examSubject, 'Vui lòng nhập môn đăng ký dự thi') ||
-                !validateField(firstChoice, 'Vui lòng nhập nguyện vọng 1 vào lớp chuyên') ||
-                !validateField(secondChoice, 'Vui lòng nhập nguyện vọng 2 vào lớp chuyên') ||
-                !validateField(language, 'Vui lòng chọn ngôn ngữ thi') ||
-                !validateField(specialSubjectAvg, 'Vui lòng nhập điểm trung bình môn chuyên') ||
-                !validateField(overallAvg, 'Vui lòng nhập điểm trung bình các môn') ||
-                !validateField(mathAvg, 'Vui lòng nhập điểm trung bình môn Toán') ||
-                !validateField(literatureAvg, 'Vui lòng nhập điểm trung bình môn Ngữ Văn') ||
-                !validateField(foreignLangAvg, 'Vui lòng nhập điểm trung bình môn Ngoại Ngữ')) {
-                return false;
-            }
-
-            // Kiểm tra ngày tháng năm hợp lệ
-            if (!isValidDate(day, month, year)) {
-                alert('Vui lòng nhập ngày tháng năm sinh hợp lệ');
-                return false;
-            }
-
-            // Kiểm tra số điện thoại hợp lệ
-            if (!isValidPhoneNumber(phone1)) {
-                alert('Số điện thoại 1 không hợp lệ. Số điện thoại phải có 10 số.');
-                return false;
-            }
-            if (!isValidPhoneNumber(phone2)) {
-                alert('Số điện thoại 2 không hợp lệ. Số điện thoại phải có 10 số.');
-                return false;
-            }
+            $.ajax({
+                url: '<?php echo Import::route_path("hoSo.route.php"); ?>',
+                method: 'POST',
+                data: {
+                    method: "tao-ho-so",
+                    fullname: fullname,
+                    gender: gender,
+                    day: day,
+                    month: month,
+                    year: year,
+                    ethnicity: ethnicity,
+                    houseNumber: houseNumber,
+                    street: street,
+                    ward: ward,
+                    city: city,
+                    province: province,
+                    phone1: phone1,
+                    phone2: phone2,
+                    schoolName: schoolName,
+                    thcsCity: thcsCity,
+                    thcsProvince: thcsProvince,
+                    examNumber: examNumber,
+                    examSubject: examSubject,
+                    firstChoice: firstChoice,
+                    secondChoice: secondChoice,
+                    language: language,
+                    specialSubjectAvg: specialSubjectAvg,
+                    overallAvg: overallAvg,
+                    mathAvg: mathAvg,
+                    literatureAvg: literatureAvg,
+                    foreignLangAvg: foreignLangAvg,
+                    conduct6: conduct6,
+                    academic6: academic6,
+                    conduct7: conduct7,
+                    academic7: academic7,
+                    conduct8: conduct8,
+                    academic8: academic8,
+                    conduct9_1: conduct9_1,
+                    academic9_1: academic9_1
+                },
+                success: function(response) {
+                    const data = JSON.parse(response);
+                    console.log(data);
+                    
+                },
+            });
+            // In ra console để kiểm tra
+            console.log({
+                "Họ và tên": fullname,
+                "Giới tính": gender,
+                "Ngày sinh": day,
+                "Tháng sinh": month,
+                "Năm sinh": year,
+                "Dân tộc": ethnicity,
+                "Số nhà": houseNumber,
+                "Phố": street,
+                "Phường": ward,
+                "Thành phố": city,
+                "Tỉnh": province,
+                "Số điện thoại 1": phone1,
+                "Số điện thoại 2": phone2,
+                "Tên trường THCS": schoolName,
+                "Thành phố THCS": thcsCity,
+                "Tỉnh THCS": thcsProvince,
+                "Số báo danh thi tốt nghiệp THCS": examNumber,
+                "Môn đăng ký dự thi": examSubject,
+                "Nguyện vọng 1": firstChoice,
+                "Nguyện vọng 2": secondChoice,
+                "Ngoại ngữ": language,
+                "Điểm trung bình môn chuyên lớp 9": specialSubjectAvg,
+                "Điểm trung bình cả năm lớp 9": overallAvg,
+                "Điểm trung bình môn Toán": mathAvg,
+                "Điểm trung bình môn Ngữ văn": literatureAvg,
+                "Điểm trung bình môn Ngoại ngữ": foreignLangAvg,
+                "Hạnh kiểm lớp 6": conduct6,
+                "Học lực lớp 6": academic6,
+                "Hạnh kiểm lớp 7": conduct7,
+                "Học lực lớp 7": academic7,
+                "Hạnh kiểm lớp 8": conduct8,
+                "Học lực lớp 8": academic8,
+                "Hạnh kiểm HK1 lớp 9": conduct9_1,
+                "Học lực HK1 lớp 9": academic9_1
+            });
         })
     })
 </script>
