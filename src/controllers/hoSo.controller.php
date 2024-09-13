@@ -1,10 +1,31 @@
 <?php
 class HoSoController
 {
-    private $hoSoRepository;
-    public function __construct(HoSoRepository $hoSoRepository)
+    private $hoSoRepository, $trangThaiHoSoRepository,$userRepository;
+    public function __construct(HoSoRepository $hoSoRepository, TrangThaiHoSoRepository $trangThaiHoSoRepository,UserRepository $userRepository)
     {
         $this->hoSoRepository = $hoSoRepository;
+        $this->trangThaiHoSoRepository = $trangThaiHoSoRepository;
+        $this->userRepository = $userRepository;
+    }
+    public function demSoBanGhiTrangThai(){
+        $data = $this->trangThaiHoSoRepository->countEach();
+        return new Response(true, $data, "Thanh cong");
+    }
+    public function capNhatTrangThai(){
+        $userUpdate = $this->userRepository->findById(Session::get("user_id"));
+        $trangThaiHoSoId = htmlspecialchars($_POST["trangThaiHoSoId"]);
+        $trangThai = htmlspecialchars($_POST["trangThai"]);
+        $ghiChu = htmlspecialchars($_POST["ghiChu"]);
+
+        $update = $this->trangThaiHoSoRepository->capNhatTrangThai($trangThaiHoSoId,$trangThai,$ghiChu,$userUpdate->fullName."#".$userUpdate->role);
+        return new Response($update, null, $update? "Cập nhật thành công!" : "Cập nhật thất bại");
+    }
+    public function getAllTrangThaiHoSo()
+    {
+        $page = htmlspecialchars($_GET["page"]);
+        $data = $this->trangThaiHoSoRepository->findWithPageIgnoreId($page, Session::get("user_id"));
+        return new Response(true, $data, "Đã lấy");
     }
     public function taoHoSo(): Response
     {
@@ -49,8 +70,14 @@ class HoSoController
         $hk_hl_8 =  $conduct8 . '-' . $academic8;
         $hk_hl_1_9 = $conduct9_1 . '-' . $academic9_1;
 
-        $ho_so = new HoSo(0, $fullName, $gender, $ngay_thang_nam_sinh, $ethnicity, $houseNumber, $street, $ward, $city, $province, $phone1, $phone2, $schoolName, $thcsCity, $thcsProvince, $examNumber, $examSubject, $firstChoice, $secondChoice, $hk_hl_6, $hk_hl_7, $hk_hl_8, $hk_hl_1_9, "", $specialSubjectAvg, $overallAvg, $mathAvg, $literatureAvg, $foreignLangAvg);
-
-        return new Response(true, $ho_so->toArray(), "Tạo thành công hồ sơ!");
+        $ho_so = new HoSo(Session::get("user_id"), $fullName, $gender, $ngay_thang_nam_sinh, $ethnicity, $houseNumber, $street, $ward, $city, $province, $phone1, $phone2, $schoolName, $thcsCity, $thcsProvince, $examNumber, $examSubject, $firstChoice, $secondChoice, $hk_hl_6, $hk_hl_7, $hk_hl_8, $hk_hl_1_9, "", $specialSubjectAvg, $overallAvg, $mathAvg, $literatureAvg, $foreignLangAvg, $language);
+        $trang_thai_ho_so = new TrangThaiHoSo(Session::get("user_id"), null, TrangThaiHoSoEnum::ChoDuyet->name, "User", "");
+        try {
+            $this->hoSoRepository->save($ho_so);
+            $this->trangThaiHoSoRepository->save($trang_thai_ho_so);
+        } catch (Exception $e) {
+            return new Response(false,  $e->getMessage(),  "Tạo hồ sơ thất bại!");
+        }
+        return new Response(true, $ho_so->toArray(),  "Tạo thành công hồ sơ!");
     }
 }

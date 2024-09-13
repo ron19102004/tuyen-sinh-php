@@ -1,34 +1,40 @@
 <?php
 class LichThiRepository implements Repository
 {
-    public function timKiemLichThiChoHoSo($ho_so_id){
+    public function timKiemLichThiChoHoSo($ho_so_id, $so_dien_thoai)
+    {
         $conn = DB::connect();
         $stmt = $conn->prepare(
             "SELECT lich_thi.*,
                            ho_so.ho_ten,
                            ho_so.ngay_thang_nam_sinh
-            FROM ho_so_lich_thi
-            INNER JOIN lich_thi ON ho_so_lich_thi.lich_thi_id = lich_thi.id
-            INNER JOIN ho_so ON ho_so_lich_thi.ho_so_id = ho_so.ho_so_id
-            WHERE ho_so_lich_thi.ho_so_id = :ho_so_id"
+        FROM ho_so_lich_thi
+        INNER JOIN lich_thi ON ho_so_lich_thi.lich_thi_id = lich_thi.id
+        INNER JOIN ho_so ON ho_so_lich_thi.ho_so_id = ho_so.ho_so_id
+        INNER JOIN users ON users.id = ho_so.ho_so_id
+        WHERE ho_so_lich_thi.ho_so_id = :ho_so_id
+        AND users.phone = :phone;"
         );
         $stmt->bindParam(':ho_so_id', $ho_so_id);
+        $stmt->bindParam(':phone', $so_dien_thoai);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $conn = null;
         $lichThis = [];
+        $thongTinHoSo = null;
         foreach ($result as $row) {
-            array_push($lichThis, [
-                "lich_thi" => LichThi::fromArray($row),
-                "thong_tin"=>[
-                    "ho_ten" => $row['ho_ten'],
-                    "ngay_thang_nam_sinh" => $row['ngay_thang_nam_sinh']
-                ]
-            ]);
+            $thongTinHoSo = [
+                "ho_ten" => $row['ho_ten'],
+                "ngay_thang_nam_sinh" => $row['ngay_thang_nam_sinh']
+            ];
+            array_push($lichThis, LichThi::fromArray($row));
         }
-        return $lichThis;
+        return [
+            "lich_thi" => $lichThis,
+            "thong_tin_ho_so" => $thongTinHoSo
+        ];
     }
-    public function datLichThiChoHoSo($ho_so_id,$lich_thi_id)
+    public function datLichThiChoHoSo($ho_so_id, $lich_thi_id)
     {
         $conn = DB::connect();
         $stmt = $conn->prepare(

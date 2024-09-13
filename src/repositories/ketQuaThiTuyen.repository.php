@@ -1,5 +1,32 @@
 <?php 
-class KetQuaThiTuyenRepository implements Repository{
+class KetQuaThiTuyenRepository implements Repository {
+    public function traCuuDiemSo($ma_ho_so,$so_dien_thoai){
+        $conn = DB::connect();
+        $stmt = $conn->prepare(
+            "SELECT ket_qua_thi_tuyen.*,
+                           ho_so.ho_ten,
+                           ho_so.ngay_thang_nam_sinh
+            FROM ket_qua_thi_tuyen
+            INNER JOIN ho_so ON ket_qua_thi_tuyen.ket_qua_thi_tuyen_id = ho_so.ho_so_id
+            INNER JOIN users ON users.id = ket_qua_thi_tuyen.ket_qua_thi_tuyen_id
+            WHERE ket_qua_thi_tuyen.ket_qua_thi_tuyen_id = :ma_ho_so AND users.phone = :so_dien_thoai"
+        );
+        $stmt->bindParam(':ma_ho_so', $ma_ho_so);
+        $stmt->bindParam(':so_dien_thoai', $so_dien_thoai);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        $conn = null;
+        if($result){
+            return [
+                "ket_qua"=>KetQuaThiTuyen::fromArray($result),
+                "thong_tin"=>[
+                    "ho_ten" => $result["ho_ten"],
+                    "ngay_thang_nam_sinh" => $result["ngay_thang_nam_sinh"]
+                ]
+            ];
+        }
+        return null;
+    }
      /**
      * Hàm cập nhật thông tin kết quả thi tuyển vào database
      * @return bool
@@ -58,7 +85,7 @@ class KetQuaThiTuyenRepository implements Repository{
         $conn = DB::connect();
         $stmt = $conn->prepare("SELECT * FROM ket_qua_thi_tuyen");
         $stmt->execute();
-        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $conn = null;
         $kq = [];
         foreach ($result as $item) {
@@ -76,7 +103,7 @@ class KetQuaThiTuyenRepository implements Repository{
                                        WHERE ket_qua_thi_tuyen_id = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_OBJ);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $conn = null;
         if($result){
             return [

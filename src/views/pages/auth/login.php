@@ -76,9 +76,7 @@ if (AuthMiddleware::isAuth()) {
                         },
                     }).showToast();
                     if (data.status) {
-                        setTimeout(() => {
-                            window.location.href = "<?php echo Env::get("server"); ?>";
-                        }, 2000)
+                        window.location.href = "<?php echo Env::get("server"); ?>";
                     }
                 }
             })

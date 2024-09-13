@@ -50,14 +50,9 @@ class UserRoute extends Route
                     break;
                 }
             case "count-each-role": {
-                    AuthMiddleware::hasRoles([UserRole::Admin->name], function () {
-                        echo $this->userController
-                            ->countEachRole()
-                            ->toJson();
-                    }, function ($message) {
-                        $res = new Response(false, null, $message);
-                        echo $res->toJson();
-                    });
+                    echo $this->userController
+                        ->countEachRole()
+                        ->toJson();
                     break;
                 }
         }

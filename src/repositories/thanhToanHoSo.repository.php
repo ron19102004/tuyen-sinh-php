@@ -5,7 +5,7 @@ class ThanhToanHoSoRepository implements Repository
     {
         $conn = DB::connect();
         $stmt = $conn->query("SELECT * FROM thanh_toan_ho_so");
-        $result = $stmt->fetchAll(PDO::FETCH_OBJ);
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $conn = null;
         $ds = [];
         foreach ($result as $thanhToanHoSo) {
@@ -18,7 +18,7 @@ class ThanhToanHoSoRepository implements Repository
         $stmt = $conn->prepare("SELECT * FROM thanh_toan_ho_so WHERE thanh_toan_ho_so_id = :id");
         $stmt->bindParam(':id', $id);
         $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_OBJ);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $conn = null;
         if($result){
             return ThanhToanHoSo::fromArray($result);

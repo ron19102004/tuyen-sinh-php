@@ -1,10 +1,10 @@
 <?php 
 class HoSo
 {
-    public $ho_so_id, $ho_ten, $gioi_tinh, $ngay_thang_nam_sinh, $dan_toc, $so_nha, $ten_pho, $ten_phuong, $ten_thanh_pho, $ten_tinh, $sdt_1, $sdt_2, $ten_truong_lop_9, $ten_thanh_pho_cua_truong, $ten_tinh_cua_truong, $so_bao_danh, $mon_chuyen_du_thi, $nguyen_vong_1, $nguyen_vong_2, $hanh_kiem_hoc_luc_6, $hanh_kiem_hoc_luc_7, $hanh_kiem_hoc_luc_8, $hanh_kiem_hoc_luc_1_9, $loai_tot_nghiep_thcs, $diem_tb_mon_chuyen, $diem_tb_lop_9, $diem_tb_toan_lop_9, $diem_tb_van_lop_9, $diem_tb_ngoai_ngu_lop_9;
+    public $ho_so_id, $ho_ten, $gioi_tinh, $ngay_thang_nam_sinh, $dan_toc, $so_nha, $ten_pho, $ten_phuong, $ten_thanh_pho, $ten_tinh, $sdt_1, $sdt_2, $ten_truong_lop_9, $ten_thanh_pho_cua_truong, $ten_tinh_cua_truong, $so_bao_danh, $mon_chuyen_du_thi, $nguyen_vong_1, $nguyen_vong_2, $hanh_kiem_hoc_luc_6, $hanh_kiem_hoc_luc_7, $hanh_kiem_hoc_luc_8, $hanh_kiem_hoc_luc_1_9, $loai_tot_nghiep_thcs, $diem_tb_mon_chuyen, $diem_tb_lop_9, $diem_tb_toan_lop_9, $diem_tb_van_lop_9, $diem_tb_ngoai_ngu_lop_9,$ten_ngoai_ngu;
 
     public function __construct(
-        $ho_so_id, $ho_ten, $gioi_tinh, $ngay_thang_nam_sinh, $dan_toc, $so_nha, $ten_pho, $ten_phuong, $ten_thanh_pho, $ten_tinh, $sdt_1, $sdt_2, $ten_truong_lop_9, $ten_thanh_pho_cua_truong, $ten_tinh_cua_truong, $so_bao_danh, $mon_chuyen_du_thi, $nguyen_vong_1, $nguyen_vong_2, $hanh_kiem_hoc_luc_6, $hanh_kiem_hoc_luc_7, $hanh_kiem_hoc_luc_8, $hanh_kiem_hoc_luc_1_9, $loai_tot_nghiep_thcs, $diem_tb_mon_chuyen, $diem_tb_lop_9, $diem_tb_toan_lop_9, $diem_tb_van_lop_9, $diem_tb_ngoai_ngu_lop_9
+        $ho_so_id, $ho_ten, $gioi_tinh, $ngay_thang_nam_sinh, $dan_toc, $so_nha, $ten_pho, $ten_phuong, $ten_thanh_pho, $ten_tinh, $sdt_1, $sdt_2, $ten_truong_lop_9, $ten_thanh_pho_cua_truong, $ten_tinh_cua_truong, $so_bao_danh, $mon_chuyen_du_thi, $nguyen_vong_1, $nguyen_vong_2, $hanh_kiem_hoc_luc_6, $hanh_kiem_hoc_luc_7, $hanh_kiem_hoc_luc_8, $hanh_kiem_hoc_luc_1_9, $loai_tot_nghiep_thcs, $diem_tb_mon_chuyen, $diem_tb_lop_9, $diem_tb_toan_lop_9, $diem_tb_van_lop_9, $diem_tb_ngoai_ngu_lop_9,$ten_ngoai_ngu
     ) {
         $this->ho_so_id = $ho_so_id;
         $this->ho_ten = $ho_ten;
@@ -35,6 +35,7 @@ class HoSo
         $this->diem_tb_toan_lop_9 = $diem_tb_toan_lop_9;
         $this->diem_tb_van_lop_9 = $diem_tb_van_lop_9;
         $this->diem_tb_ngoai_ngu_lop_9 = $diem_tb_ngoai_ngu_lop_9;
+        $this->ten_ngoai_ngu = $ten_ngoai_ngu;
     }
 
     public static function fromArray($data)
@@ -68,7 +69,8 @@ class HoSo
             $data['diem_tb_lop_9'],
             $data['diem_tb_toan_lop_9'],
             $data['diem_tb_van_lop_9'],
-            $data['diem_tb_ngoai_ngu_lop_9']
+            $data['diem_tb_ngoai_ngu_lop_9'],
+            $data['ten_ngoai_ngu']
         );
     }
     public function toArray()
@@ -102,7 +104,8 @@ class HoSo
             'diem_tb_lop_9' => $this->diem_tb_lop_9,
             'diem_tb_toan_lop_9' => $this->diem_tb_toan_lop_9,
             'diem_tb_van_lop_9' => $this->diem_tb_van_lop_9,
-            'diem_tb_ngoai_ngu_lop_9' => $this->diem_tb_ngoai_ngu_lop_9
+            'diem_tb_ngoai_ngu_lop_9' => $this->diem_tb_ngoai_ngu_lop_9,
+            'ten_ngoai_ngu' => $this->ten_ngoai_ngu,
         ];
     }
 }

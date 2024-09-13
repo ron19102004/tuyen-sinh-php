@@ -127,7 +127,7 @@ class UserRepository implements Repository
         $stmt->execute();
         $result = $conn->lastInsertId();
         $conn = null;
-        return $result;
+        return $result > 0;
     }
     public function findByUsername($username)
     {

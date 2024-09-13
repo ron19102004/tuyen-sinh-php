@@ -41,6 +41,7 @@ create table if not exists ho_so(
     diem_tb_toan_lop_9 DECIMAL(5, 2) not null,
     diem_tb_van_lop_9 DECIMAL(5, 2) not null,
     diem_tb_ngoai_ngu_lop_9 DECIMAL(5, 2) not null,
+    ten_ngoai_ngu varchar(255) not null,
     foreign key (ho_so_id) references users(id) ON DELETE CASCADE
 );
 
@@ -65,7 +66,7 @@ create table if not exists lich_thi(
     ten_mon_thi varchar(255) not null,
     ngay_thi DATE not null,
     dia_diem_thi text not null,
-    gio_thi varchar(255) not null
+    gio_thi time not null
 );
 create table if not exists ho_so_lich_thi(
     id int primary key auto_increment,

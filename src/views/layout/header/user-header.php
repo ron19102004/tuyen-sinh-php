@@ -74,9 +74,6 @@
             <div id="dropdownHoverDesktop" class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
                 <ul class=" text-sm text-gray-700" aria-labelledby="dropdownHoverButtonDesktop">
                     <li class="hover:bg-slate-200 px-4 py-3 rounded-t-lg">
-                        <a href="<?php echo Import::view_page_path("user/lookup/resume/page.php"); ?>">hồ sơ</a>
-                    </li>
-                    <li class="hover:bg-slate-200 px-4 py-3">
                         <a href="<?php echo Import::view_page_path("user/lookup/exam-schedule/page.php"); ?>">lịch thi</a>
                     </li>
                     <li class="hover:bg-slate-200 px-4 py-3 rounded-b-lg">
@@ -85,23 +82,18 @@
                 </ul>
             </div>
 
-
-            <?php
-            AuthMiddleware::isAuthenticated(function () {
-                //account
-                echo '<li class="' . (isActiveLink("user/profile/page.php") ? "active-link" : "inactive-link") . '">';
-                echo '   <a href="' . Import::view_page_path("user/profile/page.php") . '">tài khoản</a>';
-                echo '</li>';
-                //logout
-                echo '<li class="inactive-link">';
-                echo '<button class="uppercase" id="logout-btn">đăng xuất</button>';
-                echo '</li>';
-            }, function () {
-                echo '<li class="inactive-link">';
-                echo '   <a href="' . Import::view_page_path("auth/login.php") . '">đăng nhập</a>';
-                echo '</li>';
-            });
-            ?>
+            <?php if (AuthMiddleware::isAuth()) : ?>
+                <li class="<?php echo (isActiveLink("user/profile/page.php") ? "active-link" : "inactive-link") ?>">
+                    <a href="<?php echo Import::view_page_path("user/profile/page.php") ?>">tài khoản</a>
+                </li>
+                <li class="inactive-link">
+                    <button class="uppercase" id="logout-btn">đăng xuất</button>
+                </li>
+            <?php else: ?>
+                <li class="inactive-link">
+                    <a href="<?php echo Import::view_page_path("auth/login.php"); ?>">đăng nhập</a>
+                </li>
+            <?php endif; ?>
         </ul>
     </nav>
     <!-- nav mobile  -->
@@ -122,9 +114,6 @@
             <div id="dropdownMobile" class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 ">
                 <ul class="py-2 text-sm text-gray-700 " aria-labelledby="dropdownDefaultButtonMobile">
                     <li class="hover:bg-slate-200 px-4 py-3 rounded-t-lg">
-                        <a href="<?php echo Import::view_page_path("user/lookup/resume/page.php"); ?>">hồ sơ</a>
-                    </li>
-                    <li class="hover:bg-slate-200 px-4 py-3">
                         <a href="<?php echo Import::view_page_path("user/lookup/exam-schedule/page.php"); ?>">lịch thi</a>
                     </li>
                     <li class="hover:bg-slate-200 px-4 py-3 rounded-b-lg">
@@ -133,23 +122,18 @@
                 </ul>
             </div>
 
-
-            <?php
-            AuthMiddleware::isAuthenticated(function () {
-                //account
-                echo '<li class="' . (isActiveLink("user/profile/page.php") ? "active-link" : "inactive-link") . '">';
-                echo '   <a href="' . Import::view_page_path("user/profile/page.php") . '">tài khoản</a>';
-                echo '</li>';
-                //logout
-                echo '<li class="inactive-link">';
-                echo '<button class="uppercase" id="logout-btn">đăng xuất</button>';
-                echo '</li>';
-            }, function () {
-                echo '<li class="inactive-link">';
-                echo '   <a href="' . Import::view_page_path("auth/login.php") . '">đăng nhập</a>';
-                echo '</li>';
-            });
-            ?>
+            <?php if (AuthMiddleware::isAuth()) : ?>
+                <li class="<?php echo (isActiveLink("user/profile/page.php") ? "active-link" : "inactive-link") ?>">
+                    <a href="<?php echo Import::view_page_path("user/profile/page.php") ?>">tài khoản</a>
+                </li>
+                <li class="inactive-link">
+                    <button class="uppercase" id="logout-btn">đăng xuất</button>
+                </li>
+            <?php else: ?>
+                <li class="inactive-link">
+                    <a href="<?php echo Import::view_page_path("auth/login.php"); ?>">đăng nhập</a>
+                </li>
+            <?php endif; ?>
         </ul>
     </nav>
 </header>
@@ -181,9 +165,6 @@
             <div id="dropdownHover" class="z-50 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44">
                 <ul class=" text-sm text-gray-700" aria-labelledby="dropdownHoverButton">
                     <li class="hover:bg-slate-200 px-4 py-3 rounded-t-lg">
-                        <a href="<?php echo Import::view_page_path("user/lookup/resume/page.php"); ?>">hồ sơ</a>
-                    </li>
-                    <li class="hover:bg-slate-200 px-4 py-3">
                         <a href="<?php echo Import::view_page_path("user/lookup/exam-schedule/page.php"); ?>">lịch thi</a>
                     </li>
                     <li class="hover:bg-slate-200 px-4 py-3 rounded-b-lg">
@@ -191,23 +172,18 @@
                     </li>
                 </ul>
             </div>
-
-            <?php
-            AuthMiddleware::isAuthenticated(function () {
-                //account
-                echo '<li class="' . (isActiveLink("user/profile/page.php") ? "active-link" : "inactive-link") . '">';
-                echo '   <a href="' . Import::view_page_path("user/profile/page.php") . '">tài khoản</a>';
-                echo '</li>';
-                //logout
-                echo '<li class="inactive-link">';
-                echo '<button class="uppercase" id="logout-btn">đăng xuất</button>';
-                echo '</li>';
-            }, function () {
-                echo '<li class="inactive-link">';
-                echo '   <a href="' . Import::view_page_path("auth/login.php") . '">đăng nhập</a>';
-                echo '</li>';
-            });
-            ?>
+            <?php if (AuthMiddleware::isAuth()) : ?>
+                <li class="<?php echo (isActiveLink("user/profile/page.php") ? "active-link" : "inactive-link") ?>">
+                    <a href="<?php echo Import::view_page_path("user/profile/page.php") ?>">tài khoản</a>
+                </li>
+                <li class="inactive-link">
+                    <button class="uppercase" id="logout-btn">đăng xuất</button>
+                </li>
+            <?php else: ?>
+                <li class="inactive-link">
+                    <a href="<?php echo Import::view_page_path("auth/login.php"); ?>">đăng nhập</a>
+                </li>
+            <?php endif; ?>
         </ul>
     </nav>
 </header>

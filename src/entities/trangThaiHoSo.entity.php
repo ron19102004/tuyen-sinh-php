@@ -1,4 +1,11 @@
 <?php
+enum TrangThaiHoSoEnum: string
+{
+    case ChoDuyet = 'Chờ duyệt';
+    case DaDuyet = 'Đã duyệt';
+    case TuChoi = 'Từ chối';
+    case YeuCauChinh = 'Yêu cầu chỉnh';
+}
 class TrangThaiHoSo
 {
     public $trang_thai_ho_so_id, $created_at, $trang_thai_ho_so, $thong_tin_nguoi_cap_nhat, $ghi_chu;
@@ -36,5 +43,20 @@ class TrangThaiHoSo
             'thong_tin_nguoi_cap_nhat' => $this->thong_tin_nguoi_cap_nhat,
             'ghi_chu' => $this->ghi_chu
         ];
+    }
+    public static function toVNStringEnum($trang_thai_ho_so)
+    {
+        switch ($trang_thai_ho_so) {
+            case TrangThaiHoSoEnum::ChoDuyet->name:
+                return TrangThaiHoSoEnum::ChoDuyet->value;
+            case TrangThaiHoSoEnum::DaDuyet->name:
+                return TrangThaiHoSoEnum::DaDuyet->value;
+            case TrangThaiHoSoEnum::TuChoi->name:
+                return TrangThaiHoSoEnum::TuChoi->value;
+            case TrangThaiHoSoEnum::YeuCauChinh->name:
+                return TrangThaiHoSoEnum::YeuCauChinh->value;
+            default:
+                return "Trạng thái không xác định";
+        }
     }
 }

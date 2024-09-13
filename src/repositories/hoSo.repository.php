@@ -1,5 +1,5 @@
 <?php
-class HoSoRepository implements Repository{
+class HoSoRepository implements Repository {
     public function find(){
         $conn = DB::connect();
         $stmt = $conn->prepare("SELECT * FROM ho_so");
@@ -12,6 +12,11 @@ class HoSoRepository implements Repository{
         }
         return $ho_so;
     }
+    /**
+     * Summary of findById
+     * @param int $id
+     * @return HoSo|null
+     */
     public function findById($id){
         $conn = DB::connect();
         $stmt = $conn->prepare("SELECT * FROM ho_so WHERE ho_so_id = :id");
@@ -34,9 +39,9 @@ class HoSoRepository implements Repository{
         $conn = DB::connect();
         $stmt = $conn->prepare(
             "INSERT INTO ho_so (
-                ho_so_id, ho_ten, gioi_tinh, ngay_thang_nam_sinh, dan_toc, so_nha, ten_pho, ten_phuong, ten_thanh_pho, ten_tinh, sdt_1, sdt_2, ten_truong_lop_9, ten_thanh_pho_cua_truong, ten_tinh_cua_truong, so_bao_danh, mon_chuyen_du_thi, nguyen_vong_1, nguyen_vong_2, hanh_kiem_hoc_luc_6, hanh_kiem_hoc_luc_7, hanh_kiem_hoc_luc_8, hanh_kiem_hoc_luc_1_9, loai_tot_nghiep_thcs, diem_tb_mon_chuyen, diem_tb_lop_9, diem_tb_toan_lop_9, diem_tb_van_lop_9, diem_tb_ngoai_ngu_lop_9
+                ho_so_id, ho_ten, gioi_tinh, ngay_thang_nam_sinh, dan_toc, so_nha, ten_pho, ten_phuong, ten_thanh_pho, ten_tinh, sdt_1, sdt_2, ten_truong_lop_9, ten_thanh_pho_cua_truong, ten_tinh_cua_truong, so_bao_danh, mon_chuyen_du_thi, nguyen_vong_1, nguyen_vong_2, hanh_kiem_hoc_luc_6, hanh_kiem_hoc_luc_7, hanh_kiem_hoc_luc_8, hanh_kiem_hoc_luc_1_9, loai_tot_nghiep_thcs, diem_tb_mon_chuyen, diem_tb_lop_9, diem_tb_toan_lop_9, diem_tb_van_lop_9, diem_tb_ngoai_ngu_lop_9,ten_ngoai_ngu
             ) VALUES (
-                :ho_so_id, :ho_ten, :gioi_tinh, :ngay_thang_nam_sinh, :dan_toc, :so_nha, :ten_pho, :ten_phuong, :ten_thanh_pho, :ten_tinh, :sdt_1, :sdt_2, :ten_truong_lop_9, :ten_thanh_pho_cua_truong, :ten_tinh_cua_truong, :so_bao_danh, :mon_chuyen_du_thi, :nguyen_vong_1, :nguyen_vong_2, :hanh_kiem_hoc_luc_6, :hanh_kiem_hoc_luc_7, :hanh_kiem_hoc_luc_8, :hanh_kiem_hoc_luc_1_9, :loai_tot_nghiep_thcs, :diem_tb_mon_chuyen, :diem_tb_lop_9, :diem_tb_toan_lop_9, :diem_tb_van_lop_9, :diem_tb_ngoai_ngu_lop_9)"
+                :ho_so_id, :ho_ten, :gioi_tinh, :ngay_thang_nam_sinh, :dan_toc, :so_nha, :ten_pho, :ten_phuong, :ten_thanh_pho, :ten_tinh, :sdt_1, :sdt_2, :ten_truong_lop_9, :ten_thanh_pho_cua_truong, :ten_tinh_cua_truong, :so_bao_danh, :mon_chuyen_du_thi, :nguyen_vong_1, :nguyen_vong_2, :hanh_kiem_hoc_luc_6, :hanh_kiem_hoc_luc_7, :hanh_kiem_hoc_luc_8, :hanh_kiem_hoc_luc_1_9, :loai_tot_nghiep_thcs, :diem_tb_mon_chuyen, :diem_tb_lop_9, :diem_tb_toan_lop_9, :diem_tb_van_lop_9, :diem_tb_ngoai_ngu_lop_9,:ten_ngoai_ngu)"
         );
         // Bind các giá trị
         $stmt->bindParam(':ho_so_id', $hoSo->ho_so_id);
@@ -68,11 +73,12 @@ class HoSoRepository implements Repository{
         $stmt->bindParam(':diem_tb_toan_lop_9', $hoSo->diem_tb_toan_lop_9);
         $stmt->bindParam(':diem_tb_van_lop_9', $hoSo->diem_tb_van_lop_9);
         $stmt->bindParam(':diem_tb_ngoai_ngu_lop_9', $hoSo->diem_tb_ngoai_ngu_lop_9);
+        $stmt->bindParam(':ten_ngoai_ngu', $hoSo->ten_ngoai_ngu);
 
         $stmt->execute();
         $result = $conn->lastInsertId();
         $conn = null;
-        return $result;
+        return $result > 0;
     }
     public function deleteById($id){}
 }
