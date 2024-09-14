@@ -15,7 +15,7 @@
     <!-- main content -->
     <div class="bg-blue-800 text-white py-6 shadow-lg">
         <div class="container mx-auto text-center px-4">
-            <h1 class="text-4xl font-bold md:text-5xl">Tuyển Sinh Trường chuyên Lê Hồng Phong</h1>
+            <h1 class="text-4xl font-bold md:text-5xl">Tuyển Sinh Trường chuyên <?php echo Env::get("system")["name"]?></h1>
             <p class="mt-2 text-lg">Nơi ươm mầm tài năng tương lai</p>
         </div>
     </div>
@@ -91,7 +91,7 @@
             <!-- Phí tuyển sinh -->
             <div data-aos="fade-up">
                 <h3 class="text-2xl font-semibold mb-4">Phí tuyển sinh</h3>
-                <p class="text-gray-600">Phí tuyển sinh là <strong>500.000 VNĐ</strong>, nộp cùng với hồ sơ đăng ký trực tiếp hoặc thanh toán trực tuyến khi đăng ký.</p>
+                <p class="text-gray-600">Phí tuyển sinh là <strong>200.000 VNĐ</strong>, nộp cùng với hồ sơ đăng ký trực tiếp hoặc thanh toán trực tuyến khi đăng ký.</p>
             </div>
         </div>
     </section>

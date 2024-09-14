@@ -35,4 +35,28 @@ class LichThiController
             return new Response(false, $e->getMessage(), "Lỗi trong quá trình tra cứu");
         }
     }
+    public function datLichThiChoHoSo(){
+        try {
+            $maHoSo = htmlspecialchars($_POST["ma_ho_so"]);
+            $lichThiId = htmlspecialchars($_POST["lich_thi_id"]);
+            $result = $this->lichThiRepository->datLichThiChoHoSo($maHoSo,$lichThiId);
+            return new Response($result, null, $result? "Đặt lịch thi thành công" : "Đặt lịch thi thất bại");
+        } catch (Exception $e) {
+            return new Response(false, $e->getMessage(), "Lỗi trong quá trình đặt lịch thi");
+        }
+    }
+    public function xoaLichThiHS(){
+        try {
+            $lichThiId = htmlspecialchars($_POST["lich_thi_ho_so_id"]);
+            $result = $this->lichThiRepository->xoaLichThiChoHoSo($lichThiId);
+            return new Response($result, null, $result? "Xóa lịch thi thành công" : "Xóa lịch thi thất bại");
+        } catch (Exception $e) {
+            return new Response(false, $e->getMessage(), "Lỗi trong quá trình xóa lịch thi");
+        }
+    }
+    public function xoaLichThi(){
+        $lichThiId = htmlspecialchars($_POST["lich_thi_id"]);
+        $result = $this->lichThiRepository->deleteById($lichThiId);
+        return new Response($result, null, $result? "Xóa lịch thi thành công" : "Xóa lịch thi thất bại");
+    }
 }

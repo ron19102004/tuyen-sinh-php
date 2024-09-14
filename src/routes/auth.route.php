@@ -47,6 +47,28 @@ class AuthRoute extends Route
                     });
                     break;
                 }
+            case "changePassword": {
+                    AuthMiddleware::isAuthenticated(function () {
+                        echo $this->authController
+                            ->changePassword()
+                            ->toJson();
+                    }, function () {
+                        $res = new Response(false, null, "Yêu cầu đăng nhập");
+                        echo $res->toJson();
+                    });
+                    break;
+                }
+            case "resetPassword": {
+                    AuthMiddleware::hasRoles([UserRole::Admin->name], function () {
+                        echo $this->authController
+                            ->resetPassword()
+                            ->toJson();
+                    }, function () {
+                        $res = new Response(false, null, "Yêu cầu đăng nhập");
+                        echo $res->toJson();
+                    });
+                    break;
+                }
         }
     }
     public function get_action($method) {}

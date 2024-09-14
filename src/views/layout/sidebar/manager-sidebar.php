@@ -32,7 +32,7 @@ $roleCurrent = AuthMiddleware::getRoleCurrent();
 
         <?php if ($roleCurrent == UserRole::BoardOfDirectors->name): ?>
             <a class="flex items-center px-6 py-4 mt-4 text-gray-100 bg-opacity-25  <?php echo isActiveLink("manager/schedule/page.php") ? "bg-gray-700 " : "hover:bg-gray-700 "; ?>" href="<?php echo Import::view_page_path("manager/schedule/page.php"); ?>">
-                <i class="fa-solid fa-user"></i>
+                <i class="fa-solid fa-calendar-days"></i>
                 <span class="mx-3">Lịch thi</span>
             </a>
         <?php endif; ?>

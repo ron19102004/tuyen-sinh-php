@@ -1,5 +1,4 @@
 <?php
-Import::configs(["db.config.php"]);
 $sql_file_path = $_SERVER['DOCUMENT_ROOT'].'/src/migrations/db.query.sql';  // Đường dẫn đến file SQL
 $sql_content = file_get_contents($sql_file_path);
 

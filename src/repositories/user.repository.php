@@ -1,6 +1,16 @@
 <?php
 class UserRepository implements Repository
 {
+    public function updatePassword($user_id, $password){
+        $conn = DB::connect();
+        $sql = "UPDATE users SET password = :password WHERE id = :id";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':password', $password);
+        $stmt->bindParam(':id', $user_id);
+        $result = $stmt->execute();
+        $conn = null;
+        return $result;
+    }
     public function countEach()
     {
         $conn = DB::connect();
@@ -64,6 +74,24 @@ class UserRepository implements Repository
         $stmt->bindParam(':id', $id);
         $stmt->bindParam(':get', $get, PDO::PARAM_INT);
         $stmt->bindParam(':from', $from, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $conn = null;
+        $users = [];
+        foreach ($result as $user) {
+            array_push($users, UserEntity::fromArray($user));
+        }
+        return $users;
+    }
+    public function findIgnoreIdAndHasRole($id,$role, $get = 10, $from = 0)
+    {
+        $conn = DB::connect();
+        $sql = "SELECT * FROM users WHERE deleted = 0 AND id != :id AND role = :role ORDER BY id DESC LIMIT :get OFFSET :from";
+        $stmt = $conn->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':get', $get, PDO::PARAM_INT);
+        $stmt->bindParam(':from', $from, PDO::PARAM_INT);
+        $stmt->bindParam(':role', $role);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $conn = null;

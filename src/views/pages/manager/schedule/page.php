@@ -119,7 +119,7 @@ $ds_lich = $lichThiRepo->find();
                                             <td class="px-4 py-2 text-center"> <?php echo $lich->gio_thi ?></td>
                                             <td class="px-4 py-2 text-center"> <?php echo $lich->dia_diem_thi ?></td>
                                             <td class="px-4 py-2 text-center">
-                                                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition-all duration-200" onclick="">Xóa</button>
+                                                <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition-all duration-200" onclick="xoaLich('<?php echo $lich->id ?>');">Xóa</button>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -139,18 +139,17 @@ $ds_lich = $lichThiRepo->find();
      */
     function xoaLich(id) {
         $.ajax({
-            url: "<?php echo Import::route_path("ketQuaThiTuyen.route.php"); ?>",
+            url: "<?php echo Import::route_path("lichThi.route.php"); ?>",
             method: "POST",
             data: {
-                method: "cap-nhat-diem",
-                toan: $(`#toan-${id}`).val(),
-                van: $(`#van-${id}`).val(),
-                ngoai_ngu: $(`#nn-${id}`).val(),
-                chuyen: $(`#chuyen-${id}`).val(),
-                ma_ho_so: id
+                method: "xoa-lich-thi",
+                lich_thi_id: id,
             },
             success: function(response) {
                 const data = JSON.parse(response);
+                if(data.status){
+                    window.location.reload();
+                }
                 Toastify({
                     text: data.message,
                     duration: 2000,
@@ -186,9 +185,10 @@ $ds_lich = $lichThiRepo->find();
                     gio_thi: gioThi
                 },
                 success: function(response) {
-                    console.log(response);
-
                     const data = JSON.parse(response);
+                    if(data.status){
+                        window.location.reload();
+                    }
                     Toastify({
                         text: data.message,
                         duration: 2000,

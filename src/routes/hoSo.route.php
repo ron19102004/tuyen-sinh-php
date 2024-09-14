@@ -4,8 +4,19 @@ require($_SERVER['DOCUMENT_ROOT'] . "/src/utils/import.util.php");
 Import::utils(["route.util.php", "response.util.php"]);
 //auth middleware  đã có session util
 Import::interfaces(["repository.interface.php"]);
-Import::entities(["hoSo.entity.php", "trangThaiHoSo.entity.php", "thanhToanHoSo.entity.php"]);
-Import::repositories(["hoSo.repository.php", "trangThaiHoSo.repository.php", "user.repository.php", "thanhToanHoSo.repository.php"]);
+Import::entities([
+    "hoSo.entity.php",
+    "trangThaiHoSo.entity.php",
+    "thanhToanHoSo.entity.php",
+    "ketQuaThiTuyen.entity.php"
+]);
+Import::repositories([
+    "hoSo.repository.php",
+    "trangThaiHoSo.repository.php",
+    "user.repository.php",
+    "thanhToanHoSo.repository.php",
+    "ketQuaThiTuyen.repository.php"
+]);
 Import::controllers(["hoSo.controller.php"]);
 
 
@@ -18,7 +29,8 @@ class HoSoRoute extends Route
         $trangThaiHSRepo = new TrangThaiHoSoRepository();
         $userRepo = new UserRepository();
         $thanhToanHoSoRepository = new ThanhToanHoSoRepository();
-        $this->hoSoController = new HoSoController($hoSoRepo, $trangThaiHSRepo, $userRepo, $thanhToanHoSoRepository);
+        $kqThiTuyenRepo = new KetQuaThiTuyenRepository();
+        $this->hoSoController = new HoSoController($hoSoRepo, $trangThaiHSRepo, $userRepo, $thanhToanHoSoRepository, $kqThiTuyenRepo);
     }
     public function post_action($method)
     {
@@ -35,7 +47,10 @@ class HoSoRoute extends Route
                     break;
                 }
             case "cap-nhat-trang-thai-ho-so": {
-                    AuthMiddleware::hasRoles([UserRole::AdmissionCommittee->name], function () {
+                    AuthMiddleware::hasRoles([
+                        UserRole::AdmissionCommittee->name,
+                        UserRole::BoardOfDirectors->name
+                    ], function () {
                         echo $this->hoSoController
                             ->capNhatTrangThaiHoSo()
                             ->toJson();

@@ -69,6 +69,25 @@ class TrangThaiHoSoRepository implements Repository
         }
         return $trangThaiHoSo;
     }
+    public function findWithPageIgnoreIdAndStatus($page,$id,$status)
+    {
+        $offset = ($page - 1) * 10;
+        $conn = DB::connect();
+        $stmt = $conn->prepare("SELECT * FROM trang_thai_ho_so 
+        WHERE trang_thai_ho_so_id != :id AND trang_thai_ho_so = :trang_thai_ho_so
+        ORDER BY trang_thai_ho_so_id  LIMIT 10 OFFSET :offset");
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':trang_thai_ho_so', $status);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $conn = null;
+        $trangThaiHoSo = [];
+        foreach ($result as $row) {
+            array_push($trangThaiHoSo, TrangThaiHoSo::fromArray($row));
+        }
+        return $trangThaiHoSo;
+    }
     /**
      * @param mixed $id
      * @return TrangThaiHoSo|null

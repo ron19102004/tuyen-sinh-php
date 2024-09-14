@@ -9,6 +9,43 @@ class AuthController
     {
         $this->userRepository = $userRepository;
     }
+    public function resetPassword()
+    {
+        try {
+            $user_id = htmlspecialchars($_POST["user_id"]);
+            $user = $this->userRepository->findById($user_id);
+            if (!$user) {
+                return new Response(false, null, "Tài khoản không tồn tại!");
+            }
+            $newPassword = $user->username."#".$user->id."#*";
+            $result = $this->userRepository->updatePassword($user_id, password_hash($newPassword, PASSWORD_DEFAULT));
+            if ($result) {
+                return new Response(true, null, "Reset mật khẩu thành công");
+            }
+            return new Response(false, null, "Reset mật khẩu thất bại");
+        } catch (Exception $e) {
+            return new Response(false, $e->getMessage(), "Reset mật khẩu thất bại");
+        }
+    }
+    public function changePassword()
+    {
+        try {
+            $user_id = Session::get("user_id");
+            $currentPassword = htmlspecialchars($_POST["current_password"]);
+            $newPassword = htmlspecialchars($_POST["new_password"]);
+            $user = $this->userRepository->findById($user_id);
+            if (!$user || !password_verify($currentPassword, $user->password)) {
+                return new Response(false, null, "Mật khẩu hiện tại không đúng!");
+            }
+            $result = $this->userRepository->updatePassword($user_id, password_hash($newPassword, PASSWORD_DEFAULT));
+            if ($result) {
+                return new Response(true, null, "Đổi mật khẩu thành công");
+            }
+            return new Response(false, null, "Đổi mật khẩu thất bại");
+        } catch (Exception $e) {
+            return new Response(false, $e->getMessage(), "Đổi mật khẩu thất bại");
+        }
+    }
     public function me()
     {
         $user_id = Session::get("user_id");

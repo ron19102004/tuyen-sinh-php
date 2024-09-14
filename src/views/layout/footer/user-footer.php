@@ -63,14 +63,14 @@
                 </a>
             </div>
             <p class="mt-4  ">
-               <p>Mở cửa: 07:00 AM - 05:00 PM</p>
-               <p>Hoạt động: Thứ 2 - thứ 7 </p>
+               <p>Mở cửa: <?php echo Env::get("system")["openAt"]?></p>
+               <p>Hoạt động: <?php echo Env::get("system")["onlineAt"]?></p>
             </p>
         </div>
     </div>
     <div class="flex flex-col justify-center items-center pt-5 pb-10 border-t lg:flex-row">
         <p class=" ">
-            Bản quyền thuộc về TranNgocAnhDung
+            Bản quyền thuộc về <?php echo Env::get("system")["belongsTo"]?>
         </p>
     </div>
 </footer>

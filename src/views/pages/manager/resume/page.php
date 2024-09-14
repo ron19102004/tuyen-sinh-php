@@ -46,11 +46,32 @@ AuthMiddleware::hasRoles([
                 </header>
                 <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
                     <div class="container mx-auto bg-white p-2 md:p-4 shadow-lg">
+                        <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 bg-white shadow-xl rounded-lg">
+                            <div class="md:w-1/2">
+                                <label for="status-filter" class="block text-sm font-medium text-gray-800 mb-2">
+                                    Lọc theo trạng thái
+                                </label>
+                                <div class="relative">
+                                    <select id="status-filter" class="block appearance-none w-full bg-gray-100 border border-gray-300 text-gray-700 py-3 px-4 pr-10 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 ease-in-out">
+                                        <option value="0" selected>Chọn bộ lọc / hủy lọc</option>
+                                        <option value="YeuCauChinh">YÊU CẦU CHỈNH</option>
+                                        <option value="ChoDuyet">CHỜ DUYỆT</option>
+                                        <option value="DaDuyet">ĐÃ DUYỆT</option>
+                                        <option value="TuChoi">TỪ CHỐI</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4M16 15l-4 4-4-4"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="overflow-x-auto">
                             <table class="table-auto w-full bg-white rounded-lg shadow-lg">
                                 <thead class="bg-blue-600 text-white">
                                     <tr>
-                                        <th class="px-4 py-2 text-left">Mã Hồ Sơ</th>
+                                        <th class="px-4 py-2 text-left">Mã Hồ Sơ/Lịch thi</th>
                                         <th class="px-4 py-2 text-left">Chi tiết</th>
                                         <th class="px-4 py-2 text-left">Trạng thái</th>
                                         <th class="px-4 py-2 text-left">Ngày tạo</th>
@@ -107,7 +128,8 @@ AuthMiddleware::hasRoles([
             method: "GET",
             data: {
                 method: "get-all-trang-thai-hs",
-                page: page
+                page: page,
+                status_filter: $("#status-filter").val()
             },
             success: function(response) {
                 console.log(response);
@@ -117,7 +139,9 @@ AuthMiddleware::hasRoles([
                         const date = new Date(item.created_at);
                         return `
                             <tr class="border-t transition-all duration-300 hover:bg-blue-50">
-                                <td class="px-4 py-2 text-gray-700">${item.trang_thai_ho_so_id}</td>
+                                <td class="px-4 py-2 text-gray-700">
+                                    <a href="<?php echo Import::view_page_path("manager/schedule/setup.php") ?>?user_id=${item.trang_thai_ho_so_id}">${item.trang_thai_ho_so_id}</a>
+                                </td>
                                 <td class="px-4 py-2 text-gray-700">
                                    <a href="<?php echo Import::view_page_path("user/admissions/resume-role.php") ?>?user_id=${item.trang_thai_ho_so_id}" class="underline hover:text-blue-600" target="_blank">Xem chi tiết</a>
                                 </td>
@@ -166,7 +190,9 @@ AuthMiddleware::hasRoles([
                 $("#prev-btn").removeClass("hidden")
             }
         })
-
+        $("#status-filter").change(()=>{
+            getAccounts(pageCurrent)
+        })
     })
 </script>
 

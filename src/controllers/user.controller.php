@@ -16,10 +16,15 @@ class UserController
      * @param int $page
      * @return Response
      */
-    public function getAllAccounts($page)
+    public function getAllAccounts($page,$role_filter)
     {
         $offset = ($page - 1) * 10;
-        $data = $this->userRepository->findIgnoreId(Session::get("user_id"), 10, $offset);
+        $data = null;
+        if($role_filter=="0"){
+            $data = $this->userRepository->findIgnoreId(Session::get("user_id"), 10, $offset);
+        } else {
+            $data = $this->userRepository->findIgnoreIdAndHasRole(Session::get("user_id"), $role_filter, 10, $offset);
+        }
         return new Response(true, $data, "Thanh cong");
     }
     public function updateRole()

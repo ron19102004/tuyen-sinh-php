@@ -35,7 +35,7 @@ if (AuthMiddleware::isAuth()) {
                     <input type="password" id="password" class="p-3  border border-gray-300  focus:outline-none focus:ring  focus:ring-opacity-50 rounded-md shadow-sm disabled:bg-gray-100 mt-1 block w-full" />
                 </div>
                 <div class="mt-6 flex items-center justify-end">
-                    <a href="#" class="text-sm"> Quên mật khẩu? </a>
+                    <a href="./forgot-password.php" class="text-sm"> Quên mật khẩu? </a>
                 </div>
                 <div class="mt-6">
                     <button class="w-full inline-flex items-center justify-center px-4 py-2 bg-red-600 border border-transparent rounded-md font-semibold capitalize text-white hover:bg-red-700 active:bg-red-700 focus:outline-none focus:border-red-700 focus:ring   disabled:opacity-25 transition" id="submit">Xác thực</button>

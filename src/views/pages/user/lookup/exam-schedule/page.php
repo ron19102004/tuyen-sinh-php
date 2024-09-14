@@ -85,7 +85,8 @@
                             <p class="text-lg text-gray-600 mb-2" id="name">Họ tên thí sinh: ${data.data.thong_tin_ho_so.ho_ten}</p>
                             <p class="text-lg text-blue-600" id="birthdate">Ngày sinh: ${data.data.thong_tin_ho_so.ngay_thang_nam_sinh}</p>
                         </div>`)
-                        $("#result-table-body").html(data.data.lich_thi.map(item => {
+                        $("#result-table-body").html(data.data.lich_thi.map(i => {
+                            const item = i.lich_thi
                             return `
                             <tr class="bg-gray-50">
                                 <td class="px-6 py-4 border">${item.ten_ky_thi}</td>

@@ -33,6 +33,47 @@ class LichThiRoute extends Route
                     });
                     break;
                 }
+            case "xoa-lich-thi": {
+                    AuthMiddleware::hasRoles([
+                        UserRole::BoardOfDirectors->name
+                    ], function () {
+                        echo $this->lichThiController
+                            ->xoaLichThi()
+                            ->toJson();
+                    }, function ($mess) {
+                        $res = new Response(false, null, $mess);
+                        echo $res->toJson();
+                    });
+                    break;
+                }
+            case "dat-lich": {
+                    AuthMiddleware::hasRoles([
+                        UserRole::BoardOfDirectors->name,
+                        UserRole::AdmissionCommittee->name
+                    ], function () {
+                        echo $this->lichThiController
+                            ->datLichThiChoHoSo()
+                            ->toJson();
+                    }, function ($mess) {
+                        $res = new Response(false, null, $mess);
+                        echo $res->toJson();
+                    });
+                    break;
+                }
+            case "xoa-lich-thi-hs": {
+                    AuthMiddleware::hasRoles([
+                        UserRole::BoardOfDirectors->name,
+                        UserRole::AdmissionCommittee->name
+                    ], function () {
+                        echo $this->lichThiController
+                            ->xoaLichThiHS()
+                            ->toJson();
+                    }, function ($mess) {
+                        $res = new Response(false, null, $mess);
+                        echo $res->toJson();
+                    });
+                    break;
+                }
         }
     }
     public function get_action($method)

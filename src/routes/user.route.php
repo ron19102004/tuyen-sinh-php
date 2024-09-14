@@ -37,8 +37,9 @@ class UserRoute extends Route
             case "get-accounts": {
                     AuthMiddleware::hasRoles([UserRole::Admin->name], function () {
                         $page = htmlspecialchars($_GET["page"]);
+                        $role_filter = htmlspecialchars($_GET["role_filter"]);
                         echo $this->userController
-                            ->getAllAccounts($page)
+                            ->getAllAccounts($page,$role_filter)
                             ->toJson();
                     }, function ($message) {
                         $res = new Response(false, null, $message);

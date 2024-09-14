@@ -41,7 +41,34 @@ AuthMiddleware::hasRoles([UserRole::Admin->name], function () {}, function ($mes
                     </div>
                 </header>
                 <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
-                    <div class="container mx-auto bg-white p-2 md:p-4 shadow-lg">
+                    <div class="container mx-auto bg-white p-2 md:p-4 shadow-lg space-y-2">
+                        <h1>
+                            <span class="bg-[#fed014] px-2 py-1 text-blue-800 font-bold">Chú ý:</span>
+                            <span>Mật khẩu mới sẽ có dạng username#id#*</span>
+                        </h1>
+                        <div class="my-6 flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 bg-white shadow-xl rounded-lg">
+                            <div class="md:w-1/2">
+                                <label for="role-filter" class="block text-sm font-medium text-gray-800 mb-2">
+                                    Lọc theo vai trò
+                                </label>
+                                <div class="relative">
+                                    <select id="role-filter" class="block appearance-none w-full bg-gray-100 border border-gray-300 text-gray-700 py-3 px-4 pr-10 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300 ease-in-out">
+                                        <option value="0" selected>Chọn bộ lọc / hủy lọc</option>
+                                        <option value="Admin">ADMIN</option>
+                                        <option value="User">NGƯỜI DÙNG</option>
+                                        <option value="Cashier">THU NGÂN</option>
+                                        <option value="AdmissionCommittee">BAN TUYỂN SINH</option>
+                                        <option value="BoardOfDirectors">BAN GIÁM HIỆU</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4M16 15l-4 4-4-4"></path>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="overflow-x-auto">
                             <table class="table-auto w-full bg-white rounded-lg shadow-lg">
                                 <thead class="bg-blue-600 text-white">
@@ -70,13 +97,33 @@ AuthMiddleware::hasRoles([UserRole::Admin->name], function () {}, function ($mes
      * @param {number} id 
      */
     function resetPassword(id) {
-        console.log(id);
+        $.ajax({
+            url: "<?php echo Import::route_path("auth.route.php"); ?>",
+            method: "POST",
+            data: {
+                method: "resetPassword",
+                user_id: id,
+            },
+            success: (res) => {
+                const data = JSON.parse(res);
+                Toastify({
+                    text: data.message,
+                    duration: 2000,
+                    gravity: "top", // `top` or `bottom`
+                    position: "right", // `left`, `center` or `right`
+                    stopOnFocus: true, // Prevents dismissing of toast on hover
+                    style: {
+                        background: data.status ? "green" : "red",
+                    },
+                }).showToast();
+            }
+        })
     }
     /**
      * @param {number} id
      */
     function saveInfo(id) {
-        const role = $(`#role-${id}`).val();        
+        const role = $(`#role-${id}`).val();
         $.ajax({
             url: "<?php echo Import::route_path("user.route.php"); ?>",
             method: "POST",
@@ -109,7 +156,8 @@ AuthMiddleware::hasRoles([UserRole::Admin->name], function () {}, function ($mes
             method: "GET",
             data: {
                 method: "get-accounts",
-                page: page
+                page: page,
+                role_filter: $("#role-filter").val()
             },
             success: function(response) {
                 const data = JSON.parse(response);
@@ -148,19 +196,22 @@ AuthMiddleware::hasRoles([UserRole::Admin->name], function () {}, function ($mes
     let pageCurrent = 1;
     $(() => {
         getAccounts(pageCurrent)
-        $("#prev-btn").click(()=>{
-            pageCurrent --;
+        $("#prev-btn").click(() => {
+            pageCurrent--;
             getAccounts(pageCurrent)
-            if(pageCurrent === 1){
+            if (pageCurrent === 1) {
                 $("#prev-btn").addClass("hidden")
             }
         })
-        $("#next-btn").click(()=>{
-            pageCurrent ++;
+        $("#next-btn").click(() => {
+            pageCurrent++;
             getAccounts(pageCurrent)
-            if(pageCurrent > 1){
+            if (pageCurrent > 1) {
                 $("#prev-btn").removeClass("hidden")
             }
+        })
+        $("#role-filter").change((e) => {
+            getAccounts(pageCurrent)
         })
     })
 </script>

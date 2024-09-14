@@ -1,7 +1,7 @@
 <?php require $_SERVER['DOCUMENT_ROOT'] . "/src/utils/import.util.php";
-Import::entities(["hoSo.entity.php", "trangThaiHoSo.entity.php", "thanhToanHoSo.entity.php"]);
+Import::entities(["hoSo.entity.php", "trangThaiHoSo.entity.php", "thanhToanHoSo.entity.php", "lichThi.entity.php"]);
 Import::interfaces(["repository.interface.php"]);
-Import::repositories(["hoSo.repository.php", "trangThaiHoSo.repository.php", "thanhToanHoSo.repository.php"]);
+Import::repositories(["hoSo.repository.php", "trangThaiHoSo.repository.php", "thanhToanHoSo.repository.php", "lichThi.repository.php"]);
 AuthMiddleware::hasRoles([
     UserRole::AdmissionCommittee->name,
     UserRole::Cashier->name,
@@ -12,15 +12,18 @@ AuthMiddleware::hasRoles([
 $hoSoCuaToi = null;
 $trangThaiHoSo = null;
 $thanhToanHoSo = null;
+$lichThi = null;
 if (isset($_GET["user_id"]) && !empty($_GET["user_id"])) {
     try {
         $hoSoRepo = new HoSoRepository();
         $trangThaiHoSoRepo = new TrangThaiHoSoRepository();
         $thanhToanHoSoRepo = new ThanhToanHoSoRepository();
+        $lichThiRepo = new LichThiRepository();
         $id = htmlspecialchars($_GET["user_id"]);
         $hoSoCuaToi = $hoSoRepo->findById($id);
         $trangThaiHoSo = $trangThaiHoSoRepo->findById($id);
         $thanhToanHoSo = $thanhToanHoSoRepo->findById($id);
+        $lichThi = $lichThiRepo->findAllByHoSoId($id);
     } catch (Exception $e) {
     }
 }
@@ -31,7 +34,7 @@ if (isset($_GET["user_id"]) && !empty($_GET["user_id"])) {
 <head>
     <?php require Import::view_layout_path("head.php"); ?>
     <title>
-        <?php echo $hoSoCuaToi != null ? $hoSoCuaToi->ho_ten."-HS" : "Không tìm thấy hồ sơ" ?>
+        <?php echo $hoSoCuaToi != null ? $hoSoCuaToi->ho_ten . "-HS" : "Không tìm thấy hồ sơ" ?>
     </title>
 </head>
 
@@ -158,6 +161,35 @@ if (isset($_GET["user_id"]) && !empty($_GET["user_id"])) {
                         </tbody>
                     </table>
                 </div>
+                <?php if ($lichThi != null): ?>
+                    <!-- lịch thi  -->
+                    <div class="overflow-x-auto">
+                        <h3 class="text-xl font-semibold text-gray-700 mb-4">Lịch thi chi tiết</h3>
+                        <table class="table-auto w-full border-collapse border border-gray-200">
+                            <thead class="bg-gray-100 border-b border-gray-300">
+                                <tr>
+                                    <th class="px-6 py-4 text-left  border-r border-gray-300">Tên kỳ thi</th>
+                                    <th class="px-6 py-4 text-left  border-r border-gray-300">Tên môn thi</th>
+                                    <th class="px-6 py-4 text-left  border-r border-gray-300">Ngày thi</th>
+                                    <th class="px-6 py-4 text-left  border-r border-gray-300">Giờ</th>
+                                    <th class="px-6 py-4 text-left ">Địa điểm thi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="result-table-body">
+                                <?php foreach ($lichThi as $lichThiItem): ?>
+                                    <tr class="bg-gray-50 border-b border-gray-200">
+                                        <td class="px-6 py-4 text-left border-r border-gray-200"><?php echo $lichThiItem->ten_ky_thi ?></td>
+                                        <td class="px-6 py-4 text-left border-r border-gray-200"><?php echo $lichThiItem->ten_mon_thi ?></td>
+                                        <td class="px-6 py-4 text-left border-r border-gray-200"><?php echo date("d/m/Y", strtotime($lichThiItem->ngay_thi)) ?></td>
+                                        <td class="px-6 py-4 text-left border-r border-gray-200"><?php echo $lichThiItem->gio_thi ?></td>
+                                        <td class="px-6 py-4 text-left"><?php echo $lichThiItem->dia_diem_thi ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+
+                <?php endif; ?>
             </section>
 
             <!-- Footer -->

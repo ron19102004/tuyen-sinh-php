@@ -1,13 +1,14 @@
 <?php
 class HoSoController
 {
-    private $hoSoRepository, $trangThaiHoSoRepository, $userRepository, $thanhToanHoSoRepository;
-    public function __construct(HoSoRepository $hoSoRepository, TrangThaiHoSoRepository $trangThaiHoSoRepository, UserRepository $userRepository, ThanhToanHoSoRepository $thanhToanHoSoRepository)
+    private $hoSoRepository, $trangThaiHoSoRepository, $userRepository, $thanhToanHoSoRepository, $kqThiTuyenRepository;
+    public function __construct(HoSoRepository $hoSoRepository, TrangThaiHoSoRepository $trangThaiHoSoRepository, UserRepository $userRepository, ThanhToanHoSoRepository $thanhToanHoSoRepository, KetQuaThiTuyenRepository $kqThiTuyenRepository)
     {
         $this->hoSoRepository = $hoSoRepository;
         $this->trangThaiHoSoRepository = $trangThaiHoSoRepository;
         $this->userRepository = $userRepository;
         $this->thanhToanHoSoRepository = $thanhToanHoSoRepository;
+        $this->kqThiTuyenRepository = $kqThiTuyenRepository;
     }
     public function demSoBanGhiTrangThai()
     {
@@ -24,6 +25,10 @@ class HoSoController
         try {
             $id = htmlspecialchars($_POST["thanhToanHoSoId"]);
             $result = $this->thanhToanHoSoRepository->xacNhanThanhToan($id);
+            if ($result) {
+                $kq = new KetQuaThiTuyen($id);
+                $this->kqThiTuyenRepository->save($kq);
+            }
             return new Response($result, null, $result ? "Xác nhận thành công!" : "Xác nhận thất bại");
         } catch (Exception $e) {
             return new Response(false, $e->getMessage(), "Xác nhận thất bại");
@@ -56,7 +61,13 @@ class HoSoController
     public function getAllTrangThaiHoSo()
     {
         $page = htmlspecialchars($_GET["page"]);
-        $data = $this->trangThaiHoSoRepository->findWithPageIgnoreId($page, Session::get("user_id"));
+        $status_filter = htmlspecialchars($_GET["status_filter"]);
+        $data = null;
+        if ($status_filter == "0") {
+            $data = $this->trangThaiHoSoRepository->findWithPageIgnoreId($page, Session::get("user_id"));
+        } else {
+            $data = $this->trangThaiHoSoRepository->findWithPageIgnoreIdAndStatus($page, Session::get("user_id"), $status_filter);
+        }
         return new Response(true, $data, "Đã lấy");
     }
     public function getAllThanhToanHoSo()
