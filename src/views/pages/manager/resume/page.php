@@ -1,7 +1,8 @@
 <?php require $_SERVER['DOCUMENT_ROOT'] . "/src/utils/import.util.php";
-Import::middlewares(files_name: ["auth.middleware.php"]);
-Import::entities(files_name: ["user.entity.php"]);
-AuthMiddleware::hasRoles([UserRole::AdmissionCommittee->name], function () {}, function ($message) {
+AuthMiddleware::hasRoles([
+    UserRole::AdmissionCommittee->name,
+    UserRole::BoardOfDirectors->name
+], function () {}, function ($message) {
     header("Location: /src/views/pages/auth/login.php");
 });
 ?>
@@ -20,7 +21,7 @@ AuthMiddleware::hasRoles([UserRole::AdmissionCommittee->name], function () {}, f
 
         <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-gray-200">
             <!-- sidebar  -->
-            <?php require Import::view_layout_path("sidebar/admission-committe-sidebar.php"); ?>
+            <?php require Import::view_layout_path("sidebar/manager-sidebar.php"); ?>
 
             <div class="flex flex-col flex-1 overflow-hidden">
                 <header class="flex items-center justify-between px-6 py-4 bg-white border-b-4 border-indigo-600">
@@ -32,6 +33,15 @@ AuthMiddleware::hasRoles([UserRole::AdmissionCommittee->name], function () {}, f
                             </svg>
                         </button>
                         <h3 class="text-xl font-medium text-gray-700">Hồ sơ</h3>
+                    </div>
+
+                    <div class="flex justify-between items-center space-x-4">
+                        <button class="px-2 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 hidden" id="prev-btn">
+                            <i class="fas fa-arrow-left"></i>
+                        </button>
+                        <button class="px-2 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300" id="next-btn">
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
                     </div>
                 </header>
                 <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-200">
@@ -50,7 +60,7 @@ AuthMiddleware::hasRoles([UserRole::AdmissionCommittee->name], function () {}, f
                                     </tr>
                                 </thead>
                                 <tbody id="table-data">
-                                    
+
                                 </tbody>
                             </table>
                         </div>
@@ -69,12 +79,12 @@ AuthMiddleware::hasRoles([UserRole::AdmissionCommittee->name], function () {}, f
             url: "<?php echo Import::route_path("hoSo.route.php"); ?>",
             method: "POST",
             data: {
-                method: "cap-nhat-trang-thai",
+                method: "cap-nhat-trang-thai-ho-so",
                 trangThai: $(`#trang-thai-${id}`).val(),
                 trangThaiHoSoId: id,
-                ghiChu:$(`#ghi-chu-${id}`).val()
+                ghiChu: $(`#ghi-chu-${id}`).val()
             },
-            success: function(response) {                
+            success: function(response) {
                 const data = JSON.parse(response);
                 Toastify({
                     text: data.message,
@@ -100,6 +110,7 @@ AuthMiddleware::hasRoles([UserRole::AdmissionCommittee->name], function () {}, f
                 page: page
             },
             success: function(response) {
+                console.log(response);
                 const data = JSON.parse(response);
                 if (data.status) {
                     const html = data.data.map((item) => {
@@ -108,7 +119,7 @@ AuthMiddleware::hasRoles([UserRole::AdmissionCommittee->name], function () {}, f
                             <tr class="border-t transition-all duration-300 hover:bg-blue-50">
                                 <td class="px-4 py-2 text-gray-700">${item.trang_thai_ho_so_id}</td>
                                 <td class="px-4 py-2 text-gray-700">
-                                   <a href="<?php echo Import::view_page_path("user/admissions/resume-role.php")?>?user_id=${item.trang_thai_ho_so_id}" class="underline hover:text-blue-600" target="_blank">Xem chi tiết</a>
+                                   <a href="<?php echo Import::view_page_path("user/admissions/resume-role.php") ?>?user_id=${item.trang_thai_ho_so_id}" class="underline hover:text-blue-600" target="_blank">Xem chi tiết</a>
                                 </td>
                                 <td class="px-4 py-2">
                                     <div class="relative">
@@ -141,6 +152,21 @@ AuthMiddleware::hasRoles([UserRole::AdmissionCommittee->name], function () {}, f
     let pageCurrent = 1;
     $(() => {
         getAccounts(pageCurrent)
+        $("#prev-btn").click(() => {
+            pageCurrent--;
+            getAccounts(pageCurrent)
+            if (pageCurrent === 1) {
+                $("#prev-btn").addClass("hidden")
+            }
+        })
+        $("#next-btn").click(() => {
+            pageCurrent++;
+            getAccounts(pageCurrent)
+            if (pageCurrent > 1) {
+                $("#prev-btn").removeClass("hidden")
+            }
+        })
+
     })
 </script>
 

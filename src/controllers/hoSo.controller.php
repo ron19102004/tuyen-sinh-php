@@ -1,30 +1,68 @@
 <?php
 class HoSoController
 {
-    private $hoSoRepository, $trangThaiHoSoRepository,$userRepository;
-    public function __construct(HoSoRepository $hoSoRepository, TrangThaiHoSoRepository $trangThaiHoSoRepository,UserRepository $userRepository)
+    private $hoSoRepository, $trangThaiHoSoRepository, $userRepository, $thanhToanHoSoRepository;
+    public function __construct(HoSoRepository $hoSoRepository, TrangThaiHoSoRepository $trangThaiHoSoRepository, UserRepository $userRepository, ThanhToanHoSoRepository $thanhToanHoSoRepository)
     {
         $this->hoSoRepository = $hoSoRepository;
         $this->trangThaiHoSoRepository = $trangThaiHoSoRepository;
         $this->userRepository = $userRepository;
+        $this->thanhToanHoSoRepository = $thanhToanHoSoRepository;
     }
-    public function demSoBanGhiTrangThai(){
+    public function demSoBanGhiTrangThai()
+    {
         $data = $this->trangThaiHoSoRepository->countEach();
         return new Response(true, $data, "Thanh cong");
     }
-    public function capNhatTrangThai(){
-        $userUpdate = $this->userRepository->findById(Session::get("user_id"));
-        $trangThaiHoSoId = htmlspecialchars($_POST["trangThaiHoSoId"]);
-        $trangThai = htmlspecialchars($_POST["trangThai"]);
-        $ghiChu = htmlspecialchars($_POST["ghiChu"]);
+    public function demSoBanGhiThanhToan()
+    {
+        $data = $this->thanhToanHoSoRepository->countEach();
+        return new Response(true, $data, "Thanh cong");
+    }
+    public function capNhatTrangThaiThanhToan()
+    {
+        try {
+            $id = htmlspecialchars($_POST["thanhToanHoSoId"]);
+            $result = $this->thanhToanHoSoRepository->xacNhanThanhToan($id);
+            return new Response($result, null, $result ? "Xác nhận thành công!" : "Xác nhận thất bại");
+        } catch (Exception $e) {
+            return new Response(false, $e->getMessage(), "Xác nhận thất bại");
+        }
+    }
+    public function capNhatTrangThaiHoSo()
+    {
+        try {
+            $userUpdate = $this->userRepository->findById(Session::get("user_id"));
+            $trangThaiHoSoId = htmlspecialchars($_POST["trangThaiHoSoId"]);
+            $trangThai = htmlspecialchars($_POST["trangThai"]);
+            $ghiChu = htmlspecialchars($_POST["ghiChu"]);
 
-        $update = $this->trangThaiHoSoRepository->capNhatTrangThai($trangThaiHoSoId,$trangThai,$ghiChu,$userUpdate->fullName."#".$userUpdate->role);
-        return new Response($update, null, $update? "Cập nhật thành công!" : "Cập nhật thất bại");
+            $trangThaiHS = $this->trangThaiHoSoRepository->findById($trangThaiHoSoId);
+            if ($trangThaiHS === null) {
+                return new Response(false, null, "Trạng thái hồ sơ không tồn tại");
+            } else if ($trangThaiHS->trang_thai_ho_so == TrangThaiHoSoEnum::DaDuyet->name) {
+                return new Response(false, null, "Không thể chuyển trạng thái đã duyệt");
+            }
+            if ($trangThai == TrangThaiHoSoEnum::DaDuyet->name) {
+                $thanhToanHS = new ThanhToanHoSo($trangThaiHoSoId, 0, 200, null);
+                $this->thanhToanHoSoRepository->save($thanhToanHS);
+            }
+            $update = $this->trangThaiHoSoRepository->capNhatTrangThai($trangThaiHoSoId, $trangThai, $ghiChu, $userUpdate->fullName . "#" . $userUpdate->role);
+            return new Response($update, null, $update ? "Cập nhật thành công!" : "Cập nhật thất bại");
+        } catch (Exception $e) {
+            return new Response(false, $e->getMessage(), "Cập nhật thất bại");
+        }
     }
     public function getAllTrangThaiHoSo()
     {
         $page = htmlspecialchars($_GET["page"]);
         $data = $this->trangThaiHoSoRepository->findWithPageIgnoreId($page, Session::get("user_id"));
+        return new Response(true, $data, "Đã lấy");
+    }
+    public function getAllThanhToanHoSo()
+    {
+        $page = htmlspecialchars($_GET["page"]);
+        $data = $this->thanhToanHoSoRepository->findWithPage($page);
         return new Response(true, $data, "Đã lấy");
     }
     public function taoHoSo(): Response

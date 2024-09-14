@@ -1,11 +1,8 @@
 <?php
-//Import đã có env
 require($_SERVER['DOCUMENT_ROOT'] . "/src/utils/import.util.php");
 Import::utils(["route.util.php", "response.util.php"]);
 //auth middleware có đã có session util
-Import::middlewares(["auth.middleware.php"]);
 Import::interfaces(["repository.interface.php"]);
-Import::entities(["user.entity.php"]);
 Import::repositories(["user.repository.php"]);
 Import::controllers(["user.controller.php"]);
 

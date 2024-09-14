@@ -1,6 +1,4 @@
 <?php require $_SERVER['DOCUMENT_ROOT'] . "/src/utils/import.util.php";
-Import::middlewares(files_name: ["auth.middleware.php"]);
-Import::entities(files_name: ["user.entity.php"]);
 Import::interfaces(["repository.interface.php"]);
 Import::repositories(["user.repository.php"]);
 AuthMiddleware::hasRoles([UserRole::Admin->name], function () {}, function ($message) {
@@ -43,7 +41,8 @@ $userRepository = new UserRepository();
                         <div class="mt-4">
                             <div class="flex flex-wrap -mx-6">
                                 <!-- tổng số user đang có trong hệ thống -->
-                                <div class="w-full px-6 sm:w-1/2 xl:w-1/3">
+                                <!-- sm:w-1/2 xl:w-1/3  -->
+                                <div class="w-full px-6 ">
                                     <div class="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
                                         <div class="p-3 bg-indigo-600 bg-opacity-75 rounded-full">
                                             <svg class="w-8 h-8 text-white" viewBox="0 0 28 30" fill="none"

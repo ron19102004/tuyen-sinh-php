@@ -1,6 +1,4 @@
 <?php
-Import::configs(["db.config.php"]);
-
 /**
  * @template Entity
  */

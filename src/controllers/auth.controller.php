@@ -39,7 +39,6 @@ class AuthController
 
         Session::set("is_authenticated", true);
         Session::set("user_id", $user->id);
-        Session::set("user_role", $user->role);
 
         return new Response(true, $user->toArray(), "Đăng nhập thành công");
     }

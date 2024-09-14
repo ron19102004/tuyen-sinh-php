@@ -31,10 +31,10 @@ class TrangThaiHoSoRepository implements Repository
     {
         $conn = DB::connect();
         $stmt = $conn->query("SELECT COUNT(*) as count FROM trang_thai_ho_so");
-        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
         $conn = null;
         if ($result) {
-            return $result[0]['count'];
+            return $result['count'];
         }
         return 0;
     }
@@ -55,7 +55,9 @@ class TrangThaiHoSoRepository implements Repository
     {
         $offset = ($page - 1) * 10;
         $conn = DB::connect();
-        $stmt = $conn->prepare("SELECT * FROM trang_thai_ho_so LIMIT 10 OFFSET :offset WHERE trang_thai_ho_so_id != :id");
+        $stmt = $conn->prepare("SELECT * FROM trang_thai_ho_so 
+        WHERE trang_thai_ho_so_id != :id 
+        ORDER BY trang_thai_ho_so_id  LIMIT 10 OFFSET :offset");
         $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
@@ -67,6 +69,10 @@ class TrangThaiHoSoRepository implements Repository
         }
         return $trangThaiHoSo;
     }
+    /**
+     * @param mixed $id
+     * @return TrangThaiHoSo|null
+     */
     public function findById($id)
     {
         $conn = DB::connect();

@@ -1,5 +1,8 @@
 <?php
 require($_SERVER['DOCUMENT_ROOT'] . "/src/utils/env.util.php");
+require($_SERVER['DOCUMENT_ROOT'] . "/src/configs/db.config.php");
+require($_SERVER['DOCUMENT_ROOT'] . "/src/entities/user.entity.php");
+require($_SERVER['DOCUMENT_ROOT'] . "/src/middlewares/auth.middleware.php");
 /**
  * @param string $page_path
  * @return bool

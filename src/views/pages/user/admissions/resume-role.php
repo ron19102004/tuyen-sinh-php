@@ -1,15 +1,28 @@
 <?php require $_SERVER['DOCUMENT_ROOT'] . "/src/utils/import.util.php";
-Import::entities(["user.entity.php", "hoSo.entity.php"]);
+Import::entities(["hoSo.entity.php", "trangThaiHoSo.entity.php", "thanhToanHoSo.entity.php"]);
 Import::interfaces(["repository.interface.php"]);
-Import::middlewares(files_name: ["auth.middleware.php"]);
-Import::repositories(["hoSo.repository.php"]);
-AuthMiddleware::hasRoles([UserRole::AdmissionCommittee->name], fn() => null, fn() => null);
+Import::repositories(["hoSo.repository.php", "trangThaiHoSo.repository.php", "thanhToanHoSo.repository.php"]);
+AuthMiddleware::hasRoles([
+    UserRole::AdmissionCommittee->name,
+    UserRole::Cashier->name,
+    UserRole::BoardOfDirectors->name
+], fn() => null, function () {
+    header("Location: /src/views/pages/auth/login.php");
+});
 $hoSoCuaToi = null;
+$trangThaiHoSo = null;
+$thanhToanHoSo = null;
 if (isset($_GET["user_id"]) && !empty($_GET["user_id"])) {
     try {
         $hoSoRepo = new HoSoRepository();
-        $hoSoCuaToi = $hoSoRepo->findById(htmlspecialchars($_GET["user_id"]));
-    } catch (Exception $e) {}
+        $trangThaiHoSoRepo = new TrangThaiHoSoRepository();
+        $thanhToanHoSoRepo = new ThanhToanHoSoRepository();
+        $id = htmlspecialchars($_GET["user_id"]);
+        $hoSoCuaToi = $hoSoRepo->findById($id);
+        $trangThaiHoSo = $trangThaiHoSoRepo->findById($id);
+        $thanhToanHoSo = $thanhToanHoSoRepo->findById($id);
+    } catch (Exception $e) {
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -17,21 +30,28 @@ if (isset($_GET["user_id"]) && !empty($_GET["user_id"])) {
 
 <head>
     <?php require Import::view_layout_path("head.php"); ?>
-    <title>Hồ sơ</title>
+    <title>
+        <?php echo $hoSoCuaToi != null ? $hoSoCuaToi->ho_ten."-HS" : "Không tìm thấy hồ sơ" ?>
+    </title>
 </head>
 
 <body>
     <?php if ($hoSoCuaToi != null): ?>
-        <main class="max-w-4xl shadow-xl mx-auto md:mt-10" id="bienBan">
-            <!-- Header -->
-            <header class="text-center py-8 bg-blue-50">
-                <div class="mb-4">
-                    <h1 class="text-3xl font-bold tracking-wider text-blue-900">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</h1>
-                    <p class="text-sm font-semibold text-gray-700 tracking-widest">Độc lập - Tự do - Hạnh phúc</p>
+        <main class="max-w-4xl shadow-xl mx-auto md:mt-10 relative" id="bienBan">
+            <?php if ($thanhToanHoSo != null && $thanhToanHoSo->trang_thai_thanh_toan == 1): ?>
+                <div class="absolute top-12 left-10 -rotate-12 w-36 h-36">
+                    <img src="<?php echo Import::view_assets_path("dau_moc.png") ?>" alt="dấu mộc">
                 </div>
-                <div class="border-t border-black w-24 mx-auto mb-4"></div>
-                <h2 class="text-2xl font-bold text-blue-800">SỞ GIÁO DỤC VÀ ĐÀO TẠO</h2>
-                <h3 class="text-xl font-semibold text-blue-700 uppercase">TRƯỜNG CHUYÊN <?php echo Env::get("system")["name"] ?></h3>
+            <?php endif; ?>
+            <!-- Header -->
+            <header class="text-center py-8 text-white <?php echo ($thanhToanHoSo == null || ($thanhToanHoSo != null && $thanhToanHoSo->trang_thai_thanh_toan == 0)) ? "bg-red-500 " : "bg-blue-500 " ?>">
+                <div class="mb-4">
+                    <h1 class="text-3xl font-bold tracking-wider ">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</h1>
+                    <p class="text-sm font-semibold tracking-widest">Độc lập - Tự do - Hạnh phúc</p>
+                </div>
+                <div class="border-t border-white w-24 mx-auto mb-4"></div>
+                <h2 class="text-2xl font-bold ">SỞ GIÁO DỤC VÀ ĐÀO TẠO</h2>
+                <h3 class="text-xl font-semibold uppercase">TRƯỜNG CHUYÊN <?php echo Env::get("system")["name"] ?></h3>
             </header>
 
             <!-- Nội dung chính -->
@@ -141,11 +161,11 @@ if (isset($_GET["user_id"]) && !empty($_GET["user_id"])) {
             </section>
 
             <!-- Footer -->
-            <footer class="text-center py-6 bg-blue-50 text-gray-700">
+            <footer class="text-center py-6 text-white  <?php echo ($thanhToanHoSo == null || ($thanhToanHoSo != null && $thanhToanHoSo->trang_thai_thanh_toan == 0)) ? "bg-red-500 " : "bg-blue-500" ?>">
                 <p>&copy; <?php echo date("Y"); ?> Trường Chuyên <?php echo Env::get("system")["name"] ?> - Sở Giáo Dục và Đào Tạo</p>
             </footer>
         </main>
-        <div class="text-center">
+        <div class="flex flex-col justify-center items-center">
             <button onclick="printDiv('bienBan');" class="my-5 bg-blue-800 text-white px-6 py-3 rounded shadow hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
                 In Biên Bản
             </button>

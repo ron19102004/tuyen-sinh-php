@@ -51,6 +51,9 @@ class LichThiRepository implements Repository
         $conn = null;
         return $result;
     }
+    /**
+     * @return array<LichThi>
+     */
     public function find()
     {
         $conn = DB::connect();
@@ -80,7 +83,7 @@ class LichThiRepository implements Repository
     /**
      * Hàm lưu thông tin lịch thi vào database
      * @param LichThi $lichThi
-     * @return int|null
+     * @return bool|null
      */
     public function save($lichThi)
     {
@@ -102,7 +105,14 @@ class LichThiRepository implements Repository
         $stmt->execute();
         $result = $conn->lastInsertId();
         $conn = null;
-        return $result;
+        return $result > 0;
     }
-    public function deleteById($id) {}
+    public function deleteById($id) {
+        $conn = DB::connect();
+        $stmt = $conn->prepare("DELETE FROM lich_thi WHERE id = :id");
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        $conn = null;
+        return $stmt->rowCount() > 0;
+    }
 }

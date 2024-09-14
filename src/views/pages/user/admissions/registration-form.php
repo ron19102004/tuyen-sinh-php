@@ -1,8 +1,7 @@
 <?php require $_SERVER['DOCUMENT_ROOT'] . "/src/utils/import.util.php";
-Import::entities(["user.entity.php", "hoSo.entity.php"]);
+Import::entities(["hoSo.entity.php"]);
 Import::interfaces(["repository.interface.php"]);
 Import::repositories(["hoSo.repository.php"]);
-Import::middlewares(files_name: ["auth.middleware.php"]);
 AuthMiddleware::hasRoles([UserRole::User->name], fn() => null, function () {
     header("Location: /src/views/pages/auth/login.php");
 });

@@ -1,5 +1,4 @@
 <?php require($_SERVER['DOCUMENT_ROOT'] . "/src/utils/import.util.php"); 
-Import::middlewares(files_name: ["auth.middleware.php"]);
 if (AuthMiddleware::isAuth()) {
     header("Location: /");
 }

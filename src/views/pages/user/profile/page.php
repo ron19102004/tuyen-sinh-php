@@ -1,8 +1,7 @@
 <?php require $_SERVER['DOCUMENT_ROOT'] . "/src/utils/import.util.php";
-Import::entities(["user.entity.php", "trangThaiHoSo.entity.php"]);
+Import::entities(["trangThaiHoSo.entity.php"]);
 Import::interfaces(["repository.interface.php"]);
 Import::repositories(["trangThaiHoSo.repository.php"]);
-Import::middlewares(files_name: ["auth.middleware.php"]);
 AuthMiddleware::isAuthenticated(fn() => null, function () {
     header("Location: /src/views/pages/auth/login.php");
 });
@@ -80,7 +79,7 @@ $tonTaiTrangThai = $trangThaiHoSoRepo->findById(Session::get("user_id"));
                                 Hồ sơ của tôi
                             </dt>
                             <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2" id="phone">
-                                <a href="<?php echo Import::view_page_path("user/admissions/resume.php")?>" class="underline hover:text-blue-600" target="_blank">Xem chi tiết</a>
+                                <a href="<?php echo Import::view_page_path("user/admissions/resume.php") ?>" class="underline hover:text-blue-600" target="_blank">Xem chi tiết</a>
                             </dd>
                         </div>
                     <?php endif; ?>
@@ -164,15 +163,17 @@ $tonTaiTrangThai = $trangThaiHoSoRepo->findById(Session::get("user_id"));
                     $("#role").html(`
                     <a class="hover:text-blue-600" 
                     href="<?php
-                            switch (Session::get("user_role")) {
+                            switch (AuthMiddleware::getRoleCurrent()) {
                                 case UserRole::Admin->name: {
                                         echo Import::view_page_path("admin/dashboard/page.php");
                                         break;
                                     }
-                                case UserRole::AdmissionCommittee->name:{
-                                     echo Import::view_page_path("admission-committe/dashboard/page.php");
+                                case UserRole::Cashier->name:
+                                case UserRole::BoardOfDirectors->name:
+                                case UserRole::AdmissionCommittee->name: {
+                                        echo Import::view_page_path("manager/dashboard/page.php");
                                         break;
-                                }
+                                    }
                             }
                             ?>">${data.data.role}</a>
                     `);

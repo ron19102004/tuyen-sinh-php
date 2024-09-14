@@ -2,10 +2,28 @@
 Import::utils(["session.util.php"]);
 function isActiveLink($page_path)
 {
-    return $_SERVER['REQUEST_URI'] == '/src/views/pages/' . $page_path;
+  return $_SERVER['REQUEST_URI'] == '/src/views/pages/' . $page_path;
 }
 class AuthMiddleware
 {
+  public static function getRoleCurrent()
+  {
+    $id = Session::get("user_id");
+    if (!$id) {
+      return null;
+    }
+    $conn = DB::connect();
+    $stmt = $conn->prepare("SELECT * FROM users WHERE id = :id AND deleted = 0");
+    $stmt->bindParam(':id', $id);
+    $id = intval($id);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $conn = null;
+    if ($result) {
+      return UserEntity::fromArray($result)->role;
+    }
+    return null;
+  }
   /**
    * @return bool
    */
@@ -13,9 +31,10 @@ class AuthMiddleware
   {
     if (AuthMiddleware::isAuth())
       return false;
-    if (!Session::get("user_role"))
+    $roleCurrent = AuthMiddleware::getRoleCurrent();
+    if (!$roleCurrent)
       return false;
-    return Session::get("user_role") == $role;
+    return $roleCurrent == $role;
   }
   /**
    * @return bool
@@ -37,7 +56,8 @@ class AuthMiddleware
       $error("Yêu cầu đăng nhập");
       return;
     }
-    if (in_array(Session::get("user_role"), $roles) == false) {
+    $roleCurrent = AuthMiddleware::getRoleCurrent();
+    if (in_array($roleCurrent, $roles) == false) {
       $error("Không có quyền truy cập!");
       return;
     }

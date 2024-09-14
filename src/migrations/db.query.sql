@@ -56,7 +56,7 @@ create table if not exists trang_thai_ho_so(
 create table if not exists thanh_toan_ho_so(
     thanh_toan_ho_so_id int primary key,
     trang_thai_thanh_toan tinyint(1) default 0,
-    so_tien DECIMAL(10, 2) not null,
+    so_tien DECIMAL(12, 3) not null,
     ngay_thanh_toan DATE,
     foreign key (thanh_toan_ho_so_id) references ho_so(ho_so_id) ON DELETE CASCADE
 );

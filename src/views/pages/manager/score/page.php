@@ -1,5 +1,8 @@
 <?php require $_SERVER['DOCUMENT_ROOT'] . "/src/utils/import.util.php";
-AuthMiddleware::hasRoles([UserRole::Admin->name], function () {}, function ($message) {
+AuthMiddleware::hasRoles([
+    UserRole::AdmissionCommittee->name,
+    UserRole::BoardOfDirectors->name
+], function () {}, function ($message) {
     header("Location: /src/views/pages/auth/login.php");
 });
 ?>
@@ -9,7 +12,7 @@ AuthMiddleware::hasRoles([UserRole::Admin->name], function () {}, function ($mes
 
 <head>
     <?php require Import::view_layout_path("head.php"); ?>
-    <title>Tài khoản người dùng - Admin</title>
+    <title>Điểm số tuyển sinh</title>
 </head>
 
 <body>
@@ -18,7 +21,7 @@ AuthMiddleware::hasRoles([UserRole::Admin->name], function () {}, function ($mes
 
         <div x-data="{ sidebarOpen: false }" class="flex h-screen bg-gray-200">
             <!-- sidebar  -->
-            <?php require Import::view_layout_path("sidebar/admin-sidebar.php"); ?>
+            <?php require Import::view_layout_path("sidebar/manager-sidebar.php"); ?>
 
             <div class="flex flex-col flex-1 overflow-hidden">
                 <header class="flex items-center justify-between px-6 py-4 bg-white border-b-4 border-indigo-600">
@@ -29,8 +32,9 @@ AuthMiddleware::hasRoles([UserRole::Admin->name], function () {}, function ($mes
                                     stroke-linejoin="round"></path>
                             </svg>
                         </button>
-                        <h3 class="text-xl font-medium text-gray-700">Tài khoản</h3>
+                        <h3 class="text-xl font-medium text-gray-700">Điểm số</h3>
                     </div>
+
                     <div class="flex justify-between items-center space-x-4">
                         <button class="px-2 py-1 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 hidden" id="prev-btn">
                             <i class="fas fa-arrow-left"></i>
@@ -46,16 +50,16 @@ AuthMiddleware::hasRoles([UserRole::Admin->name], function () {}, function ($mes
                             <table class="table-auto w-full bg-white rounded-lg shadow-lg">
                                 <thead class="bg-blue-600 text-white">
                                     <tr>
-                                        <th class="px-4 py-2 text-left">ID</th>
-                                        <th class="px-4 py-2 text-left">Username</th>
-                                        <th class="px-4 py-2 text-left">Email</th>
-                                        <th class="px-4 py-2 text-left">Họ và tên</th>
-                                        <th class="px-4 py-2 text-left">Số điện thoại</th>
-                                        <th class="px-4 py-2 text-left">Vai trò</th>
+                                        <th class="px-4 py-2 text-left">Mã Hồ Sơ</th>
+                                        <th class="px-4 py-2 text-left">Điểm Toán</th>
+                                        <th class="px-4 py-2 text-left">Điểm Văn</th>
+                                        <th class="px-4 py-2 text-left">Điểm Ngoại Ngữ</th>
+                                        <th class="px-4 py-2 text-left">Điểm môn chuyên</th>
                                         <th class="px-4 py-2 text-center">Thao tác</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table-data">
+
                                 </tbody>
                             </table>
                         </div>
@@ -67,26 +71,21 @@ AuthMiddleware::hasRoles([UserRole::Admin->name], function () {}, function ($mes
 </body>
 <script>
     /**
-     * @param {number} id 
-     */
-    function resetPassword(id) {
-        console.log(id);
-    }
-    /**
      * @param {number} id
      */
-    function saveInfo(id) {
-        const role = $(`#role-${id}`).val();        
+    function capNhatTrangThai(id) {
         $.ajax({
-            url: "<?php echo Import::route_path("user.route.php"); ?>",
+            url: "<?php echo Import::route_path("ketQuaThiTuyen.route.php"); ?>",
             method: "POST",
             data: {
-                method: "update-role",
-                id: id,
-                role: role
+                method: "cap-nhat-diem",
+                toan: $(`#toan-${id}`).val(),
+                van: $(`#van-${id}`).val(),
+                ngoai_ngu: $(`#nn-${id}`).val(),
+                chuyen: $(`#chuyen-${id}`).val(),
+                ma_ho_so: id
             },
             success: function(response) {
-                console.log(response);
                 const data = JSON.parse(response);
                 Toastify({
                     text: data.message,
@@ -105,37 +104,35 @@ AuthMiddleware::hasRoles([UserRole::Admin->name], function () {}, function ($mes
 
     function getAccounts(page) {
         $.ajax({
-            url: "<?php echo Import::route_path("user.route.php"); ?>",
+            url: "<?php echo Import::route_path("ketQuaThiTuyen.route.php"); ?>",
             method: "GET",
             data: {
-                method: "get-accounts",
+                method: "lay-diem-theo-trang",
                 page: page
             },
             success: function(response) {
                 const data = JSON.parse(response);
+                console.log(data);
+
                 if (data.status) {
                     const html = data.data.map((item) => {
                         return `
                             <tr class="border-t transition-all duration-300 hover:bg-blue-50">
-                                <td class="px-4 py-2 text-gray-700">${item.id}</td>
-                                <td class="px-4 py-2 text-gray-700">${item.username}</td>
-                                <td class="px-4 py-2 text-gray-700">${item.email}</td>
-                                <td class="px-4 py-2 text-gray-700">${item.fullName}</td>
-                                <td class="px-4 py-2 text-gray-700">${item.phone}</td>
-                                <td class="px-4 py-2">
-                                    <div class="relative">
-                                        <select id="role-${item.id}" class=" w-full p-2 border rounded focus:outline-none focus:ring focus:border-blue-300 uppercase">
-                                            <option ${item.role.toLowerCase() === "user" ? "selected": ""} value="User">Người dùng</option>
-                                            <option ${item.role.toLowerCase() === "cashier" ? "selected": ""} value="Cashier">Thu ngân</option>
-                                            <option ${item.role.toLowerCase() === "admin" ? "selected": ""} value="Admin">Admin</option>
-                                            <option ${item.role.toLowerCase() === "admissioncommittee" ? "selected": ""} value="AdmissionCommittee">Ban tuyển sinh</option>
-                                            <option ${item.role.toLowerCase() === "boardofdirectors" ? "selected": ""} value="BoardOfDirectors">Ban giám hiệu</option>
-                                        </select>
-                                    </div>
+                                <td class="px-4 py-2 text-gray-700">${item.ket_qua_thi_tuyen_id}</td>
+                                <td class="px-4 py-2 text-gray-700">
+                                    <input id="toan-${item.ket_qua_thi_tuyen_id}" type="number" class="max-w-24" value="${item.diem_toan}">
                                 </td>
-                                <td class="px-4 py-2 text-center flex">
-                                    <button class="bg-red-500 text-white px-4 py-2 rounded-lg mr-2 hover:bg-red-600 transition-all duration-200" onclick="resetPassword(${item.id});">Reset mật khẩu</button>
-                                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition-all duration-200" onclick="saveInfo(${item.id});">Lưu</button>
+                                <td class="px-4 py-2">
+                                    <input id="van-${item.ket_qua_thi_tuyen_id}" type="number" class="max-w-24" value="${item.diem_van}">
+                                </td>
+                                <td class="px-4 py-2 text-gray-700">
+                                    <input id="nn-${item.ket_qua_thi_tuyen_id}" type="number" class="max-w-24" value="${item.diem_ngoai_ngu}">
+                                </td>
+                                <td class="px-4 py-2 text-gray-700">
+                                    <input id="chuyen-${item.ket_qua_thi_tuyen_id}" type="number" class="max-w-24" value="${item.diem_mon_chuyen}">
+                                </td>
+                                <td class="px-4 py-2 text-center">
+                                    <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-800 transition-all duration-200" onclick="capNhatTrangThai(${item.ket_qua_thi_tuyen_id});">Lưu</button>
                                 </td>
                             </tr>
                         `;
@@ -148,20 +145,21 @@ AuthMiddleware::hasRoles([UserRole::Admin->name], function () {}, function ($mes
     let pageCurrent = 1;
     $(() => {
         getAccounts(pageCurrent)
-        $("#prev-btn").click(()=>{
-            pageCurrent --;
+        $("#prev-btn").click(() => {
+            pageCurrent--;
             getAccounts(pageCurrent)
-            if(pageCurrent === 1){
+            if (pageCurrent === 1) {
                 $("#prev-btn").addClass("hidden")
             }
         })
-        $("#next-btn").click(()=>{
-            pageCurrent ++;
+        $("#next-btn").click(() => {
+            pageCurrent++;
             getAccounts(pageCurrent)
-            if(pageCurrent > 1){
+            if (pageCurrent > 1) {
                 $("#prev-btn").removeClass("hidden")
             }
         })
+
     })
 </script>
 
